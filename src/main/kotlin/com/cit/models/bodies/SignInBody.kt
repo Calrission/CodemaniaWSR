@@ -1,0 +1,12 @@
+package com.cit.models.bodies
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class SignInBody(
+    override val login: String,
+    override val password: String
+): IdentityBody()
+
+
+

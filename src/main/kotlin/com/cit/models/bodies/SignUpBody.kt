@@ -1,25 +1,41 @@
 package com.cit.models.bodies
 
+import com.cit.enums.Sex
 import com.cit.interfaces.ResultValidation
-import com.cit.utils.ValidationUtils.Companion.isValidEmail
+import com.cit.utils.DateTimeUtils.Companion.isValidDate
+import com.cit.utils.DateTimeUtils.Companion.parseDate
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
 @Serializable
 data class SignUpBody(
-    override val login: String,
     override val password: String,
-    val email: String
+    override val email: String,
+
+    val firstname: String,
+    val lastname: String,
+    val patronymic: String,
+    val sex: String,
+    val dateBirthDay: String,
 ): IdentityBody(){
     override fun validate(): ResultValidation {
-        val beforeResult = super.validate()
-        if (beforeResult.success){
-            if (email.isEmpty())
-                return ResultValidation(false, "Почта не должна быть пустой")
-            if (!email.isValidEmail())
-                return ResultValidation(false, "Почта не соотвествует паттерну")
-            return beforeResult
-        }else{
-            return beforeResult
-        }
+        val oldResult = super.validate()
+        if (!oldResult.success)
+            return oldResult
+
+        if (firstname.isEmpty())
+            return ResultValidation(false, "Имя не должно быть пустое")
+        if (lastname.isEmpty())
+            return ResultValidation(false, "Фамилия не должна быть пустой")
+        if (patronymic.isEmpty())
+            return ResultValidation(false, "Отчество не должно быть пустое")
+        if (sex !in Sex.getAllValueStr())
+            return ResultValidation(false, "Пол должен быть из ${Sex.getAllValueStr()}")
+        if (!dateBirthDay.isValidDate())
+            return ResultValidation(false, "Дата рождения не корректна")
+        if (dateBirthDay.parseDate()!!.isAfter(LocalDate.now()))
+            return ResultValidation(false, "Дата рождения не может быть в будущем")
+
+        return ResultValidation(true)
     }
 }

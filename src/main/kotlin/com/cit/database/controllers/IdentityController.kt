@@ -29,8 +29,8 @@ class IdentityController {
     }
 
     suspend fun signUp(call: ApplicationCall, signUpBody: SignUpBody){
-        if (checkExistLogin(signUpBody.login) || checkExistEmail(signUpBody.email)){
-            call.respondError(HttpStatusCode.NotFound, "Такой пользователь (логин и/или почта) уже существует")
+        if (checkExistEmail(signUpBody.email)){
+            call.respondError(HttpStatusCode.NotFound, "Такой пользователь уже существует")
             return
         }
 
@@ -66,11 +66,7 @@ class IdentityController {
     }
 
     suspend fun getUser(identityBody: IdentityBody): User?{
-        return daoUser.selectSingle { (Users.login eq identityBody.login).and(Users.password eq identityBody.password) }
-    }
-
-    suspend fun checkExistLogin(login: String): Boolean{
-        return daoUser.selectSingle { Users.login eq login } != null
+        return daoUser.selectSingle { (Users.email eq identityBody.email).and(Users.password eq identityBody.password) }
     }
 
     suspend fun checkExistEmail(email: String): Boolean{

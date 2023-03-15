@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignInBody(
-    override val login: String,
+    override val email: String,
     override val password: String
 ): IdentityBody()
 

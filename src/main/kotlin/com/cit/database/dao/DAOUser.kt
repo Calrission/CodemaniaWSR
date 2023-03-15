@@ -4,16 +4,22 @@ import com.cit.database.DAOTable
 import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.User
 import com.cit.database.tables.Users
+import com.cit.enums.Sex.Companion.isSex
 import com.cit.models.bodies.SignUpBody
+import com.cit.utils.DateTimeUtils.Companion.parseDate
 import org.jetbrains.exposed.sql.*
 
 class DAOUser: DAOTable<User, Users, SignUpBody>() {
     override fun resultRowToModel(row: ResultRow): User {
         return User(
             id = row[Users.id],
-            login = row[Users.login],
+            firstname = row[Users.firstname],
+            lastname = row[Users.lastname],
+            patronymic = row[Users.patronymic],
             password = row[Users.password],
-            email = row[Users.email]
+            email = row[Users.email],
+            sex = row[Users.sex],
+            dateBirthDay = row[Users.dateBirthDay]
         )
     }
 
@@ -40,9 +46,13 @@ class DAOUser: DAOTable<User, Users, SignUpBody>() {
     override suspend fun insert(model: SignUpBody): User? {
         return pushQuery {
             Users.insert {
-                it[login] = model.login
+                it[firstname] = model.firstname
+                it[lastname] = model.lastname
+                it[patronymic] = model.patronymic
+                it[sex] = model.sex.isSex()!!.valueInt
                 it[email] = model.email
                 it[password] = model.password
+                it[dateBirthDay] = model.dateBirthDay.parseDate()!!
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -56,9 +66,13 @@ class DAOUser: DAOTable<User, Users, SignUpBody>() {
     override suspend fun edit(model: SignUpBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return pushQuery {
             Users.update(where) {
-                it[login] = model.login
+                it[firstname] = model.firstname
+                it[lastname] = model.lastname
+                it[patronymic] = model.patronymic
+                it[sex] = model.sex.isSex()!!.valueInt
                 it[email] = model.email
                 it[password] = model.password
+                it[dateBirthDay] = model.dateBirthDay.parseDate()!!
             } > 0
         }
     }

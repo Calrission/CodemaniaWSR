@@ -30,6 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
     implementation("com.h2database:h2:$h2_version")
     implementation("org.postgresql:postgresql:$postgresql_version")
     implementation("io.ktor:ktor-server-double-receive-jvm:$ktor_version")

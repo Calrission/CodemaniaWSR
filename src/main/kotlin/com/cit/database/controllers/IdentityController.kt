@@ -51,7 +51,7 @@ class IdentityController {
             return
         }
 
-        applicationCall.respond(token as SafeToken)
+        applicationCall.respond(token as ModelToken)
     }
 
     suspend fun setNewTokenUser(userId: Int): Token?{

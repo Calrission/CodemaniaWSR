@@ -1,5 +1,7 @@
 package com.cit.database
 
+import com.cit.database.tables.TagTypes
+import com.cit.database.tables.Tags
 import com.cit.database.tables.Tokens
 import com.cit.database.tables.Users
 import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
@@ -27,6 +29,8 @@ object DatabaseFactory{
         transaction(database){
             SchemaUtils.create(Users)
             SchemaUtils.create(Tokens)
+            SchemaUtils.create(Tags)
+            SchemaUtils.create(TagTypes)
         }
     }
 

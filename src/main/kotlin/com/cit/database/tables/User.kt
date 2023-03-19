@@ -2,7 +2,9 @@ package com.cit.database.tables
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.date
+import org.jetbrains.exposed.sql.`java-time`.datetime
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class User(
     val id: Int,
@@ -24,6 +26,7 @@ object Users: Table(){
     val patronymic = varchar("patronymic", 100)
     val sex = integer("sex")
     val dateBirthDay = date("dateBirthDay")
+    val dateTimeCreate = datetime("dateTimeCreate").default(LocalDateTime.now())
 
     override val primaryKey = PrimaryKey(id)
 }

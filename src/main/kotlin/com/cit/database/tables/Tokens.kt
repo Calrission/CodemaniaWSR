@@ -12,10 +12,10 @@ class Token(
 open class TokenBody(
     token: String,
     val idUser: Int
-): SafeToken(token)
+): ModelToken(token)
 
 @Serializable
-open class SafeToken(
+open class ModelToken(
     val token: String
 )
 

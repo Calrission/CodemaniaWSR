@@ -23,3 +23,8 @@ data class ModelTag(
     val name: String,
     val type: ModelTagType
 )
+@Serializable
+data class ModelTagWithoutType(
+    val id: Int,
+    val name: String,
+)

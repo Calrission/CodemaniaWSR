@@ -1,9 +1,6 @@
 package com.cit.database
 
-import com.cit.database.tables.TagTypes
-import com.cit.database.tables.Tags
-import com.cit.database.tables.Tokens
-import com.cit.database.tables.Users
+import com.cit.database.tables.*
 import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
@@ -31,6 +28,8 @@ object DatabaseFactory{
             SchemaUtils.create(Tokens)
             SchemaUtils.create(Tags)
             SchemaUtils.create(TagTypes)
+            SchemaUtils.create(Roles)
+            SchemaUtils.create(TagsCourses)
         }
     }
 

@@ -19,7 +19,8 @@ class DAOUser: DAOTable<User, Users, SignUpBody>() {
             password = row[Users.password],
             email = row[Users.email],
             sex = row[Users.sex],
-            dateBirthDay = row[Users.dateBirthDay]
+            dateBirthDay = row[Users.dateBirthDay],
+            avatar = row[Users.avatar]
         )
     }
 

@@ -32,6 +32,7 @@ object DatabaseFactory{
             SchemaUtils.create(TagsCourses)
             SchemaUtils.create(Courses)
             SchemaUtils.create(CourseMentors)
+            SchemaUtils.create(SoldCourses)
         }
     }
 

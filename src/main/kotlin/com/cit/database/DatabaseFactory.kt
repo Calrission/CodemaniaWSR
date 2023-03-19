@@ -33,6 +33,8 @@ object DatabaseFactory{
             SchemaUtils.create(Courses)
             SchemaUtils.create(CourseMentors)
             SchemaUtils.create(SoldCourses)
+            SchemaUtils.create(FormatsLesson)
+            SchemaUtils.create(TypesLesson)
         }
     }
 

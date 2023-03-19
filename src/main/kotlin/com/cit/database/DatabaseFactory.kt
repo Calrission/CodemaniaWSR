@@ -35,6 +35,7 @@ object DatabaseFactory{
             SchemaUtils.create(SoldCourses)
             SchemaUtils.create(FormatsLesson)
             SchemaUtils.create(TypesLesson)
+            SchemaUtils.create(TypesChat)
         }
     }
 

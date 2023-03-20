@@ -1,4 +1,4 @@
-package com.cit.database.enums
+package com.cit.enums
 
 enum class DirectionDay(val message: String){
     NEXT("next"), PREV("prev");

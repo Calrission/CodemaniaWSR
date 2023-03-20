@@ -16,6 +16,17 @@ data class ModelHuman(
     val id: Int
 )
 
+@Serializable
+data class ModelProfile(
+    val firstname: String,
+    val lastname: String,
+    val patronymic: String,
+    val avatar: String,
+    val type: ModelRole,
+    val id: Int,
+    val courses: List<ModelCourseShort>
+)
+
 data class User(
     val id: Int,
     val email: String,
@@ -23,7 +34,7 @@ data class User(
     val firstname: String,
     val lastname: String,
     val patronymic: String,
-    val avatar: String,
+    val avatar: String?,
     val sex: Int,
     val dateBirthDay: LocalDate,
 )
@@ -36,7 +47,7 @@ object Users: Table(){
     val lastname = varchar("lastname", 100)
     val patronymic = varchar("patronymic", 100)
     val sex = integer("sex")
-    val avatar = varchar("avatar", 100)
+    val avatar = varchar("avatar", 100).nullable()
     val dateBirthDay = date("dateBirthDay")
     val dateTimeCreate = datetime("dateTimeCreate").default(LocalDateTime.now())
 

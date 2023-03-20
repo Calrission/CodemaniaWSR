@@ -34,3 +34,11 @@ data class ModelCourse(
     val maxCountLessonOfWeek: Int,
     val cover: String
 )
+
+@Serializable
+data class ModelCourseShort(
+    val id: Int,
+    val title: String,
+    val tags: List<ModelTagWithoutType>,
+    val cover: String
+)

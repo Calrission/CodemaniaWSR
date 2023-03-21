@@ -43,7 +43,7 @@ class DAOTag: DAOTable<Tag, Tags, TagBody>() {
         return pushQuery {
             Tags.insert {
                 it[name] = model.name
-                it[typeId] = typeId
+                it[typeId] = model.typeId
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }

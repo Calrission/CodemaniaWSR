@@ -1,6 +1,8 @@
 package com.cit.models.bodies
 
+import com.cit.database.tables.UserBody
 import com.cit.enums.Sex
+import com.cit.enums.Sex.Companion.isSex
 import com.cit.interfaces.ResultValidation
 import com.cit.utils.DateTimeUtils.Companion.isValidDate
 import com.cit.utils.DateTimeUtils.Companion.parseDate
@@ -18,6 +20,11 @@ data class SignUpBody(
     val sex: String,
     val dateBirthDay: String,
 ): IdentityBody(){
+    fun toUserBody(): UserBody = UserBody(
+        email, password, firstname, lastname, patronymic,
+        null, sex.isSex()!!.valueInt, dateBirthDay.parseDate()!!
+    )
+
     override fun validate(): ResultValidation {
         val oldResult = super.validate()
         if (!oldResult.success)

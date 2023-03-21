@@ -3,10 +3,11 @@ package com.cit.database.dao
 import com.cit.database.DAOTable
 import com.cit.database.DatabaseFactory
 import com.cit.database.tables.TypeLesson
+import com.cit.database.tables.TypeLessonBody
 import com.cit.database.tables.TypesLesson
 import org.jetbrains.exposed.sql.*
 
-class DAOTypesLesson: DAOTable<TypeLesson, TypesLesson, TypeLesson>() {
+class DAOTypesLesson: DAOTable<TypeLesson, TypesLesson, TypeLessonBody>() {
     override fun resultRowToModel(row: ResultRow): TypeLesson {
         return TypeLesson(
             id = row[TypesLesson.id],
@@ -39,7 +40,7 @@ class DAOTypesLesson: DAOTable<TypeLesson, TypesLesson, TypeLesson>() {
         }
     }
 
-    override suspend fun insert(model: TypeLesson): TypeLesson? {
+    override suspend fun insert(model: TypeLessonBody): TypeLesson? {
         return DatabaseFactory.pushQuery {
             TypesLesson.insert {
                 it[name] = model.name
@@ -47,7 +48,7 @@ class DAOTypesLesson: DAOTable<TypeLesson, TypesLesson, TypeLesson>() {
         }
     }
 
-    override suspend fun edit(model: TypeLesson, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
+    override suspend fun edit(model: TypeLessonBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return DatabaseFactory.pushQuery {
             TypesLesson.update(where) {
                 it[name] = model.name

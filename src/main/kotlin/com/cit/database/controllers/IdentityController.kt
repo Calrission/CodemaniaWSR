@@ -34,7 +34,7 @@ class IdentityController {
             return
         }
 
-        val newUser = daoUser.insert(signUpBody)
+        val newUser = daoUser.insert(signUpBody.toUserBody())
         if (newUser == null) {
             call.respondError(error = "Пользователь не создан, попробуйте еще раз !")
             return

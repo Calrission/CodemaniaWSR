@@ -10,6 +10,10 @@ object TypesChat: Table() {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
+data class TypeChatBody(
+    val name: String
+)
+
 @Serializable
 data class TypeChat(
     val id: Int,

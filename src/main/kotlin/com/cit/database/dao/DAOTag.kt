@@ -5,7 +5,7 @@ import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.*
 import org.jetbrains.exposed.sql.*
 
-class DAOTag: DAOTable<Tag, Tags, Tag>() {
+class DAOTag: DAOTable<Tag, Tags, TagBody>() {
     override fun resultRowToModel(row: ResultRow): Tag {
         return Tag(
             id = row[Tags.id],
@@ -39,7 +39,7 @@ class DAOTag: DAOTable<Tag, Tags, Tag>() {
         }
     }
 
-    override suspend fun insert(model: Tag): Tag? {
+    override suspend fun insert(model: TagBody): Tag? {
         return pushQuery {
             Tags.insert {
                 it[name] = model.name
@@ -48,7 +48,7 @@ class DAOTag: DAOTable<Tag, Tags, Tag>() {
         }
     }
 
-    override suspend fun edit(model: Tag, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
+    override suspend fun edit(model: TagBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return pushQuery {
             Tags.update(where) {
                 it[name] = model.name

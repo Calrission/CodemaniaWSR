@@ -10,6 +10,10 @@ object TagTypes: Table() {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
+data class TagTypeBody(
+    val name: String
+)
+
 @Serializable
 data class ModelTagType(
     val id: Int,

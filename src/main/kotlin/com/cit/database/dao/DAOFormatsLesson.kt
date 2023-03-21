@@ -3,10 +3,11 @@ package com.cit.database.dao
 import com.cit.database.DAOTable
 import com.cit.database.DatabaseFactory
 import com.cit.database.tables.FormatLesson
+import com.cit.database.tables.FormatLessonBody
 import com.cit.database.tables.FormatsLesson
 import org.jetbrains.exposed.sql.*
 
-class DAOFormatsLesson: DAOTable<FormatLesson, FormatsLesson, FormatLesson>() {
+class DAOFormatsLesson: DAOTable<FormatLesson, FormatsLesson, FormatLessonBody>() {
     override fun resultRowToModel(row: ResultRow): FormatLesson {
         return FormatLesson(
             id = row[FormatsLesson.id],
@@ -39,7 +40,7 @@ class DAOFormatsLesson: DAOTable<FormatLesson, FormatsLesson, FormatLesson>() {
         }
     }
 
-    override suspend fun insert(model: FormatLesson): FormatLesson? {
+    override suspend fun insert(model: FormatLessonBody): FormatLesson? {
         return DatabaseFactory.pushQuery {
             FormatsLesson.insert {
                 it[name] = model.name
@@ -47,7 +48,7 @@ class DAOFormatsLesson: DAOTable<FormatLesson, FormatsLesson, FormatLesson>() {
         }
     }
 
-    override suspend fun edit(model: FormatLesson, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
+    override suspend fun edit(model: FormatLessonBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return DatabaseFactory.pushQuery {
             FormatsLesson.update(where) {
                 it[name] = model.name

@@ -8,6 +8,10 @@ object TagsCourses: Table() {
     val idTag = integer("idTag")
 }
 
+data class TagCourseBody(
+    val idCourse: Int,
+    val idTag: Int
+)
 data class TagCourse(
     val id: Int,
     val idCourse: Int,

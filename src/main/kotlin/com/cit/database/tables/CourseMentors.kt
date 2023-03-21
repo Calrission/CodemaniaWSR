@@ -8,6 +8,11 @@ object CourseMentors: Table() {
     val idMentor = integer("idMentor")
 }
 
+data class CourseMentorBody(
+    val idCourse: Int,
+    val idMentor: Int
+)
+
 data class CourseMentor(
     val id: Int,
     val idCourse: Int,

@@ -27,6 +27,17 @@ data class ModelProfile(
     val courses: List<ModelCourseShort>
 )
 
+data class UserBody(
+    val email: String,
+    val password: String,
+    val firstname: String,
+    val lastname: String,
+    val patronymic: String,
+    val avatar: String?,
+    val sex: Int,
+    val dateBirthDay: LocalDate,
+)
+
 data class User(
     val id: Int,
     val email: String,

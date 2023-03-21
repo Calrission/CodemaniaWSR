@@ -9,6 +9,10 @@ object FormatsLesson: Table() {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
+data class FormatLessonBody(
+    val name: String
+)
+
 data class FormatLesson(
     val id: Int,
     val name: String

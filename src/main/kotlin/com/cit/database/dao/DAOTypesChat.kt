@@ -3,10 +3,11 @@ package com.cit.database.dao
 import com.cit.database.DAOTable
 import com.cit.database.DatabaseFactory
 import com.cit.database.tables.TypeChat
+import com.cit.database.tables.TypeChatBody
 import com.cit.database.tables.TypesChat
 import org.jetbrains.exposed.sql.*
 
-class DAOTypesChat: DAOTable<TypeChat, TypesChat, TypeChat>() {
+class DAOTypesChat: DAOTable<TypeChat, TypesChat, TypeChatBody>() {
     override fun resultRowToModel(row: ResultRow): TypeChat {
         return TypeChat(
             id = row[TypesChat.id],
@@ -39,7 +40,7 @@ class DAOTypesChat: DAOTable<TypeChat, TypesChat, TypeChat>() {
         }
     }
 
-    override suspend fun insert(model: TypeChat): TypeChat? {
+    override suspend fun insert(model: TypeChatBody): TypeChat? {
         return DatabaseFactory.pushQuery {
             TypesChat.insert {
                 it[name] = model.name
@@ -47,7 +48,7 @@ class DAOTypesChat: DAOTable<TypeChat, TypesChat, TypeChat>() {
         }
     }
 
-    override suspend fun edit(model: TypeChat, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
+    override suspend fun edit(model: TypeChatBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return DatabaseFactory.pushQuery {
             TypesChat.update(where) {
                 it[name] = model.name

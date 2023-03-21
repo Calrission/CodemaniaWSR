@@ -17,6 +17,11 @@ data class Tag (
     val typeId: Int
 )
 
+data class TagBody(
+    val name: String,
+    val typeId: Int
+)
+
 @Serializable
 data class ModelTag(
     val id: Int,

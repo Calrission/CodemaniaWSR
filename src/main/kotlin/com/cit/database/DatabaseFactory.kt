@@ -36,6 +36,8 @@ object DatabaseFactory{
             SchemaUtils.create(FormatsLesson)
             SchemaUtils.create(TypesLesson)
             SchemaUtils.create(TypesChat)
+            SchemaUtils.create(Materials)
+            SchemaUtils.create(RolesUsers)
         }
     }
 

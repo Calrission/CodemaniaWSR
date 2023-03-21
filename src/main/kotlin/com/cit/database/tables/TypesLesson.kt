@@ -9,6 +9,10 @@ object TypesLesson: Table() {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
+data class TypeLessonBody(
+    val name: String
+)
+
 data class TypeLesson(
     val id: Int,
     val name: String

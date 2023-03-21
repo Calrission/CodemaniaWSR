@@ -10,6 +10,10 @@ object Roles: Table() {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
+data class RoleBody(
+    val name: String
+)
+
 @Serializable
 data class ModelRole(
     val id: Int,

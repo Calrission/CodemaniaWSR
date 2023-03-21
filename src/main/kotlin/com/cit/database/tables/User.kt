@@ -11,8 +11,7 @@ data class ModelHuman(
     val firstname: String,
     val lastname: String,
     val patronymic: String,
-    val avatar: String,
-    val type: ModelRole,
+    val avatar: String?,
     val id: Int
 )
 
@@ -21,8 +20,7 @@ data class ModelProfile(
     val firstname: String,
     val lastname: String,
     val patronymic: String,
-    val avatar: String,
-    val type: ModelRole,
+    val avatar: String?,
     val id: Int,
     val courses: List<ModelCourseShort>
 )
@@ -48,7 +46,9 @@ data class User(
     val avatar: String?,
     val sex: Int,
     val dateBirthDay: LocalDate,
-)
+){
+    fun toModelHuman(): ModelHuman = ModelHuman(firstname, lastname, patronymic, avatar, id)
+}
 
 object Users: Table(){
     val id = integer("id").autoIncrement()

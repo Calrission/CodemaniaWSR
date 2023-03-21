@@ -14,7 +14,10 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody>() {
             datetime = row[Lessons.datetime],
             duration = row[Lessons.duration],
             isComplete = row[Lessons.isComplete],
-            idCourse = row[Lessons.idCourse]
+            idCourse = row[Lessons.idCourse],
+            idUser = row[Lessons.idUser],
+            file = row[Lessons.file],
+            commentFile = row[Lessons.commentFile]
         )
     }
 
@@ -47,11 +50,14 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody>() {
         return pushQuery {
             Lessons.insert {
                 it[title] = model.title
-                it[description] = description
-                it[idCourse] = idCourse
-                it[datetime] = datetime
-                it[duration] = duration
-                it[isComplete] = isComplete
+                it[description] = model.description
+                it[idCourse] = model.idCourse
+                it[datetime] = model.datetime
+                it[duration] = model.duration
+                it[isComplete] = model.isComplete
+                it[idUser] = model.idUser
+                it[file] = model.file
+                it[commentFile] = model.commentFile
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -60,11 +66,14 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody>() {
         return pushQuery {
             Lessons.update(where) {
                 it[title] = model.title
-                it[description] = description
-                it[idCourse] = idCourse
-                it[datetime] = datetime
-                it[duration] = duration
-                it[isComplete] = isComplete
+                it[description] = model.description
+                it[idCourse] = model.idCourse
+                it[datetime] = model.datetime
+                it[duration] = model.duration
+                it[isComplete] = model.isComplete
+                it[idUser] = model.idUser
+                it[file] = model.file
+                it[commentFile] = model.commentFile
             } > 0
         }
     }

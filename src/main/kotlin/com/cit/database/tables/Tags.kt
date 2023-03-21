@@ -6,30 +6,16 @@ import org.jetbrains.exposed.sql.Table
 object Tags: Table() {
     val id = integer("id").autoIncrement()
     val name = varchar("name", 500)
-    val typeId = integer("typeId")
 
     override val primaryKey = PrimaryKey(id)
 }
-
+@Serializable
 data class Tag (
     val id: Int,
     val name: String,
-    val typeId: Int
 )
 
 data class TagBody(
     val name: String,
     val typeId: Int
-)
-
-@Serializable
-data class ModelTag(
-    val id: Int,
-    val name: String,
-    val type: ModelTagType
-)
-@Serializable
-data class ModelTagWithoutType(
-    val id: Int,
-    val name: String,
 )

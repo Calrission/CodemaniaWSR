@@ -18,7 +18,7 @@ class IdentityController {
     private val daoToken = DAOToken()
 
     suspend fun signIn(call: ApplicationCall, signInBody: SignInBody){
-        val user = getUser(signInBody)
+        val user = daoUser.getUser(signInBody)
 
         if (user == null){
             call.respondError(HttpStatusCode.NotFound, "Пользователь не найден")
@@ -29,7 +29,7 @@ class IdentityController {
     }
 
     suspend fun signUp(call: ApplicationCall, signUpBody: SignUpBody){
-        if (checkExistEmail(signUpBody.email)){
+        if (daoUser.checkExistEmail(signUpBody.email)){
             call.respondError(HttpStatusCode.NotFound, "Такой пользователь уже существует")
             return
         }
@@ -63,13 +63,5 @@ class IdentityController {
                 Tokens.idUser eq userId
             }
         }
-    }
-
-    suspend fun getUser(identityBody: IdentityBody): User?{
-        return daoUser.selectSingle { (Users.email eq identityBody.email).and(Users.password eq identityBody.password) }
-    }
-
-    suspend fun checkExistEmail(email: String): Boolean{
-        return daoUser.selectSingle { Users.email eq email } != null
     }
 }

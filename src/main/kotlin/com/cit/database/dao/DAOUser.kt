@@ -6,9 +6,11 @@ import com.cit.database.tables.User
 import com.cit.database.tables.UserBody
 import com.cit.database.tables.Users
 import com.cit.enums.Sex.Companion.isSex
+import com.cit.models.bodies.IdentityBody
 import com.cit.models.bodies.SignUpBody
 import com.cit.utils.DateTimeUtils.Companion.parseDate
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class DAOUser: DAOTable<User, Users, UserBody>() {
     override fun resultRowToModel(row: ResultRow): User {
@@ -77,5 +79,13 @@ class DAOUser: DAOTable<User, Users, UserBody>() {
                 it[dateBirthDay] = model.dateBirthDay
             } > 0
         }
+    }
+
+    suspend fun getUser(identityBody: IdentityBody): User?{
+        return selectSingle { (Users.email eq identityBody.email).and(Users.password eq identityBody.password) }
+    }
+
+    suspend fun checkExistEmail(email: String): Boolean{
+        return selectSingle { Users.email eq email } != null
     }
 }

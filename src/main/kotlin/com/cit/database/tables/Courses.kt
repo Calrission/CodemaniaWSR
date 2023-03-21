@@ -23,22 +23,26 @@ data class Course(
     val title: String,
     val description: String,
     val cover: String
-)
+){
+    fun toModelCourse(tags: List<Tag>, mentors: List<ModelHuman>) = ModelCourse(id, title, description, tags, mentors, cover)
+}
 
 @Serializable
 data class ModelCourse(
     val id: Int,
     val title: String,
     val description: String,
-    val tags: List<ModelTagWithoutType>,
+    val tags: List<Tag>,
     val mentors: List<ModelHuman>,
     val cover: String
-)
+){
+    fun toModelCourseShort() = ModelCourseShort(id, title, tags, cover)
+}
 
 @Serializable
 data class ModelCourseShort(
     val id: Int,
     val title: String,
-    val tags: List<ModelTagWithoutType>,
+    val tags: List<Tag>,
     val cover: String
 )

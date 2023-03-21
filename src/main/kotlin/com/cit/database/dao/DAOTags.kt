@@ -5,12 +5,11 @@ import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.*
 import org.jetbrains.exposed.sql.*
 
-class DAOTag: DAOTable<Tag, Tags, TagBody>() {
+class DAOTags: DAOTable<Tag, Tags, TagBody>() {
     override fun resultRowToModel(row: ResultRow): Tag {
         return Tag(
             id = row[Tags.id],
-            name = row[Tags.name],
-            typeId = row[Tags.typeId]
+            name = row[Tags.name]
         )
     }
 
@@ -43,7 +42,6 @@ class DAOTag: DAOTable<Tag, Tags, TagBody>() {
         return pushQuery {
             Tags.insert {
                 it[name] = model.name
-                it[typeId] = model.typeId
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -52,7 +50,6 @@ class DAOTag: DAOTable<Tag, Tags, TagBody>() {
         return pushQuery {
             Tags.update(where) {
                 it[name] = model.name
-                it[typeId] = model.typeId
             } > 0
         }
     }

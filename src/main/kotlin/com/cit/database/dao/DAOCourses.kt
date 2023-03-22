@@ -13,7 +13,8 @@ class DAOCourses: DAOTable<Course, Courses, CourseBody>() {
             id = row[Courses.id],
             title = row[Courses.title],
             description = row[Courses.description],
-            cover = row[Courses.cover]
+            cover = row[Courses.cover],
+            plan = row[Courses.plan]
         )
     }
 
@@ -45,9 +46,10 @@ class DAOCourses: DAOTable<Course, Courses, CourseBody>() {
     override suspend fun insert(model: CourseBody): Course? {
         return DatabaseFactory.pushQuery {
             Courses.insert {
-                it[title] = title
-                it[description] = description
-                it[cover] = cover
+                it[title] = model.title
+                it[description] = model.description
+                it[cover] = model.cover
+                it[plan] = model.plan
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -55,9 +57,10 @@ class DAOCourses: DAOTable<Course, Courses, CourseBody>() {
     override suspend fun edit(model: CourseBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return DatabaseFactory.pushQuery {
             Courses.update(where) {
-                it[title] = title
-                it[description] = description
-                it[cover] = cover
+                it[title] = model.title
+                it[description] = model.description
+                it[cover] = model.cover
+                it[plan] = model.plan
             } > 0
         }
     }

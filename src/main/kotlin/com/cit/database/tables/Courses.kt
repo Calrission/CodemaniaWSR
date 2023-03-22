@@ -8,6 +8,7 @@ object Courses: Table() {
     val title = varchar("title", 1000)
     val description = varchar("description", 5000)
     val cover = varchar("cover", 100)
+    val plan = varchar("plan", 50000)
 
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
@@ -15,16 +16,18 @@ object Courses: Table() {
 data class CourseBody(
     val title: String,
     val description: String,
-    val cover: String
+    val cover: String,
+    val plan: String
 )
 
 data class Course(
     val id: Int,
     val title: String,
     val description: String,
-    val cover: String
+    val cover: String,
+    val plan: String
 ){
-    fun toModelCourse(tags: List<Tag>, mentors: List<ModelHuman>) = ModelCourse(id, title, description, tags, mentors, cover)
+    fun toModelCourse(tags: List<Tag>, mentors: List<ModelHuman>) = ModelCourse(id, title, description, tags, mentors, cover, plan)
 }
 
 @Serializable
@@ -34,7 +37,8 @@ data class ModelCourse(
     val description: String,
     val tags: List<Tag>,
     val mentors: List<ModelHuman>,
-    val cover: String
+    val cover: String,
+    val plan: String
 ){
     fun toModelCourseShort() = ModelCourseShort(id, title, tags, cover)
 }

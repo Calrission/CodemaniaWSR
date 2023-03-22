@@ -1,7 +1,10 @@
 package com.cit.plugins
 
 import com.cit.catalogController
+import com.cit.coursesController
+import com.cit.utils.receiveQueryParameter
 import com.cit.utils.receiveUserFromToken
+import com.cit.utils.respondModelAnswer
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -13,12 +16,13 @@ fun Application.configureCatalog(){
         }
 
         get("catalog/courses"){
-            val user = call.receiveUserFromToken()
-            if (user != null){
-                call.respond(catalogController.getCatalogUserCourses(user.id))
-            }else{
-                call.respond(catalogController.getCatalogAllCourses())
-            }
+            val idUser = call.receiveUserFromToken()?.id
+            call.respondModelAnswer(catalogController.respondCatalogCourses(idUser))
+        }
+
+        get("catalog/course"){
+            val idCourse = call.receiveQueryParameter("idCourse")?.toInt() ?: return@get
+            call.respondModelAnswer(catalogController.respondCourse(idCourse))
         }
     }
 }

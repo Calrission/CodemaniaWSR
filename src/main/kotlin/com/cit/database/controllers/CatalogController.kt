@@ -2,15 +2,16 @@ package com.cit.database.controllers
 
 import com.cit.catalogController
 import com.cit.coursesController
+import com.cit.database.tables.Material
 import com.cit.database.tables.ModelCourse
 import com.cit.database.tables.ModelCourseShort
 import com.cit.database.tables.Tag
+import com.cit.materialsController
 import com.cit.models.ModelAnswer
 import com.cit.tagsController
 import io.ktor.http.*
 
 class CatalogController {
-
     suspend fun getCatalogTags(): List<Tag>{
         return tagsController.getALlTags()
     }

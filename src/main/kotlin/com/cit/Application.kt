@@ -17,6 +17,7 @@ val catalogController = CatalogController()
 val tagsController = TagsController()
 val identityController = IdentityController()
 val usersController = UsersController()
+val materialsController = MaterialsController()
 
 fun main(args: Array<String>) {
 

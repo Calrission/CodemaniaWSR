@@ -2,6 +2,8 @@ package com.cit.plugins
 
 import com.cit.catalogController
 import com.cit.coursesController
+import com.cit.materialsController
+import com.cit.models.ModelAnswer
 import com.cit.utils.receiveQueryParameter
 import com.cit.utils.receiveUserFromToken
 import com.cit.utils.respondModelAnswer
@@ -23,6 +25,11 @@ fun Application.configureCatalog(){
         get("catalog/course"){
             val idCourse = call.receiveQueryParameter("idCourse")?.toInt() ?: return@get
             call.respondModelAnswer(catalogController.respondCourse(idCourse))
+        }
+
+        get("catalog/materials"){
+            val result = ModelAnswer(answer = materialsController.getAllMaterials())
+            call.respondModelAnswer(result)
         }
     }
 }

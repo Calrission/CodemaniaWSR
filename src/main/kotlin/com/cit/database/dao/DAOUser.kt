@@ -54,6 +54,7 @@ class DAOUser: DAOTable<User, Users, UserBody>() {
                 it[lastname] = model.lastname
                 it[patronymic] = model.patronymic
                 it[sex] = model.sex
+                it[avatar] = model.avatar
                 it[email] = model.email
                 it[password] = model.password
                 it[dateBirthDay] = model.dateBirthDay
@@ -74,6 +75,7 @@ class DAOUser: DAOTable<User, Users, UserBody>() {
                 it[lastname] = model.lastname
                 it[patronymic] = model.patronymic
                 it[sex] = model.sex
+                it[avatar] = model.avatar
                 it[email] = model.email
                 it[password] = model.password
                 it[dateBirthDay] = model.dateBirthDay
@@ -87,5 +89,15 @@ class DAOUser: DAOTable<User, Users, UserBody>() {
 
     suspend fun checkExistEmail(email: String): Boolean{
         return selectSingle { Users.email eq email } != null
+    }
+
+    suspend fun updateAvatar(avatar: String, idUser: Int): Boolean{
+        return pushQuery {
+            Users.update({
+                Users.id eq idUser
+            }){
+                it[Users.avatar] = avatar
+            }
+        } > 0
     }
 }

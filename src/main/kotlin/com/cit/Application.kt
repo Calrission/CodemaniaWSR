@@ -42,4 +42,5 @@ fun Application.module() {
 
     configureIdentityRouting()
     configureCatalog()
+    configureFilesRouting()
 }

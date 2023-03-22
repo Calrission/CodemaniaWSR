@@ -1,12 +1,9 @@
 package com.cit.database.controllers
 
-import com.cit.database.DatabaseFactory
 import com.cit.database.dao.DAOCourseMentors
 import com.cit.database.dao.DAOToken
 import com.cit.database.dao.DAOUser
 import com.cit.database.tables.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.select
 
 class UsersController {
 
@@ -25,6 +22,10 @@ class UsersController {
 
     suspend fun checkValidToken(token: String): Boolean{
         return daoToken.selectSingle { Tokens.token eq token } != null
+    }
+
+    suspend fun updateAvatar(avatarName: String, idUser: Int): Boolean{
+        return daoUser.updateAvatar(avatarName, idUser)
     }
 
     private suspend fun getMentorsIdsCourse(idCourse: Int): List<Int> = daoCourseMentor.selectMany {

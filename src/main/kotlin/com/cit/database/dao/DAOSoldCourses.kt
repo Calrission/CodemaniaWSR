@@ -11,11 +11,9 @@ class DAOSoldCourses: DAOTable<SoldCourse, SoldCourses, SoldCourseBody>() {
     override fun resultRowToModel(row: ResultRow): SoldCourse {
         return SoldCourse(
             id = row[SoldCourses.id],
+            idUser = row[SoldCourses.idUser],
             idCourse = row[SoldCourses.idCourse],
-            startEducation = row[SoldCourses.startEducation],
-            countLessonOfWeek = row[SoldCourses.countLessonOfWeek],
-            formatLessonsId = row[SoldCourses.formatLessonsId],
-            typeLessonsId = row[SoldCourses.typeLessonsId]
+            startEducation = row[SoldCourses.startEducation]
         )
     }
 
@@ -47,11 +45,9 @@ class DAOSoldCourses: DAOTable<SoldCourse, SoldCourses, SoldCourseBody>() {
     override suspend fun insert(model: SoldCourseBody): SoldCourse? {
         return DatabaseFactory.pushQuery {
             SoldCourses.insert {
-                it[typeLessonsId] = model.typeLessonsId
-                it[formatLessonsId] = model.formatLessonsId
                 it[idCourse] = model.idCourse
+                it[idUser] = model.idUser
                 it[startEducation] = model.startEducation
-                it[countLessonOfWeek] = model.countLessonOfWeek
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -59,11 +55,9 @@ class DAOSoldCourses: DAOTable<SoldCourse, SoldCourses, SoldCourseBody>() {
     override suspend fun edit(model: SoldCourseBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return DatabaseFactory.pushQuery {
             SoldCourses.update(where) {
-                it[typeLessonsId] = model.typeLessonsId
-                it[formatLessonsId] = model.formatLessonsId
                 it[idCourse] = model.idCourse
+                it[idUser] = model.idUser
                 it[startEducation] = model.startEducation
-                it[countLessonOfWeek] = model.countLessonOfWeek
             } > 0
         }
     }

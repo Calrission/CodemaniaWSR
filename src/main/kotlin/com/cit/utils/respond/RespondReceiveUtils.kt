@@ -61,6 +61,15 @@ suspend inline fun ApplicationCall.receiveQueryParameter(parameter: String): Str
     return value
 }
 
+suspend inline fun ApplicationCall.receiveHeaderParameter(header: String): String? {
+    val value = request.headers["filename"]
+    if (value == null){
+        respondError(error = "Check header: filename")
+        return null
+    }
+    return value
+}
+
 suspend inline fun ApplicationCall.receiveUserFromToken(): User?{
     val token = receiveQueryToken(false) ?: return null
     return usersController.getUserByToken(token)

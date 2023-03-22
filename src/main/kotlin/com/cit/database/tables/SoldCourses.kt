@@ -23,4 +23,5 @@ data class SoldCourse(
     val id: Int,
     val idCourse: Int,
     val idUser: Int,
+    val startEducation: LocalDate,
 )

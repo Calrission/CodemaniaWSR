@@ -4,9 +4,6 @@ import com.cit.models.Connection
 import com.cit.models.ModelMessage
 import com.cit.models.ModelSystemMessage
 import com.cit.usersController
-import com.cit.utils.receiveQueryToken
-import com.cit.utils.receiveUserByQueryToken
-import com.cit.utils.respondModelAnswer
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*

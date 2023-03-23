@@ -13,10 +13,7 @@ data class ModelHuman(
     val patronymic: String,
     val avatar: String?,
     val id: Int
-){
-    fun getFIO(): String = "$lastname ${firstname[0]}.${patronymic[0]}."
-}
-
+)
 @Serializable
 data class ModelProfile(
     val firstname: String,

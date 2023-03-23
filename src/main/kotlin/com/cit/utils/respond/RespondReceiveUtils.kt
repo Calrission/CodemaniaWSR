@@ -29,7 +29,7 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveTransform(): T?{
     return null
 }
 
-suspend inline fun ApplicationCall.receiveQueryToken(respondError: Boolean = true): String?{
+suspend inline fun ApplicationCall.receiveQueryToken(respondError: Boolean = true): String? {
     val token = request.queryParameters["token"]
     if (token == null) {
         if (respondError) respondError(HttpStatusCode.Forbidden, "Check query parameter 'token'")
@@ -40,6 +40,16 @@ suspend inline fun ApplicationCall.receiveQueryToken(respondError: Boolean = tru
         return null
     }
     return token
+}
+
+suspend inline fun ApplicationCall.receiveUserByQueryToken(respondError: Boolean = true): User? {
+    val token = receiveQueryToken() ?: return null
+    val user = usersController.getUserByToken(token)
+    if (user == null){
+        if (respondError) respondError(error="token not valid")
+        return null
+    }
+    return user
 }
 
 suspend inline fun ApplicationCall.receiveQueryParameters(requiredParameters: List<String>): Map<String, String>? {

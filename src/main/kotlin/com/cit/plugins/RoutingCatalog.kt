@@ -1,7 +1,6 @@
 package com.cit.plugins
 
 import com.cit.catalogController
-import com.cit.coursesController
 import com.cit.materialsController
 import com.cit.models.ModelAnswer
 import com.cit.utils.receiveQueryParameter

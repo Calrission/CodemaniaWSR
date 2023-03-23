@@ -2,8 +2,8 @@ package com.cit.database.tables
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.date
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.javatime.datetime
 import java.time.LocalDate
 import java.time.LocalDateTime
 @Serializable
@@ -13,7 +13,9 @@ data class ModelHuman(
     val patronymic: String,
     val avatar: String?,
     val id: Int
-)
+){
+    fun getFIO(): String = "$lastname ${firstname[0]}.${patronymic[0]}."
+}
 
 @Serializable
 data class ModelProfile(
@@ -48,6 +50,7 @@ data class User(
     val dateBirthDay: LocalDate,
 ){
     fun toModelHuman(): ModelHuman = ModelHuman(firstname, lastname, patronymic, avatar, id)
+    fun getFIO(): String = "$lastname ${firstname[0]}.${patronymic[0]}."
 }
 
 object Users: Table(){

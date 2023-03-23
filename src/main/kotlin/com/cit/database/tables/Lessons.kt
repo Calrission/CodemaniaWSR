@@ -1,7 +1,7 @@
 package com.cit.database.tables
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.javatime.datetime
 import java.time.LocalDateTime
 
 object Lessons: Table() {

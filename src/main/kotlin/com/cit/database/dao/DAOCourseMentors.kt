@@ -12,7 +12,7 @@ class DAOCourseMentors: DAOTable<CourseMentor, CourseMentors, CourseMentorBody>(
         return CourseMentor(
             id = row[CourseMentors.id],
             idCourse = row[CourseMentors.idCourse],
-            idMentor = row[CourseMentors.idMentor]
+            idUser = row[CourseMentors.idUser]
         )
 }
 
@@ -45,7 +45,7 @@ class DAOCourseMentors: DAOTable<CourseMentor, CourseMentors, CourseMentorBody>(
         return DatabaseFactory.pushQuery {
             CourseMentors.insert {
                 it[idCourse] = model.idCourse
-                it[idMentor] = model.idMentor
+                it[idUser] = model.idUser
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -54,7 +54,7 @@ class DAOCourseMentors: DAOTable<CourseMentor, CourseMentors, CourseMentorBody>(
         return DatabaseFactory.pushQuery {
             CourseMentors.update(where) {
                 it[idCourse] = model.idCourse
-                it[idMentor] = model.idMentor
+                it[idUser] = model.idUser
             } > 0
         }
     }

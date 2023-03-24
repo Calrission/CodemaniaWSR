@@ -30,6 +30,6 @@ class UsersController {
 
     private suspend fun getMentorsIdsCourse(idCourse: Int): List<Int> = daoCourseMentor.selectMany {
         CourseMentors.idCourse eq idCourse
-    }.map { it.idMentor }
+    }.map { it.idUser }
 
 }

@@ -11,7 +11,6 @@ class DAOMaterials: DAOTable<Material, Materials, MaterialBody>() {
             id = row[Materials.id],
             title = row[Materials.title],
             cover = row[Materials.cover],
-            idCourse = row[Materials.idCourse],
             url = row[Materials.url]
         )
     }
@@ -47,7 +46,6 @@ class DAOMaterials: DAOTable<Material, Materials, MaterialBody>() {
                 it[cover] = model.cover
                 it[url] = model.url
                 it[title] = model.title
-                it[idCourse] = model.idCourse
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -58,7 +56,6 @@ class DAOMaterials: DAOTable<Material, Materials, MaterialBody>() {
                 it[cover] = model.cover
                 it[url] = model.url
                 it[title] = model.title
-                it[idCourse] = model.idCourse
             } > 0
         }
     }

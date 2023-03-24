@@ -14,7 +14,8 @@ class DAOCourses: DAOTable<Course, Courses, CourseBody>() {
             title = row[Courses.title],
             description = row[Courses.description],
             cover = row[Courses.cover],
-            plan = row[Courses.plan]
+            plan = row[Courses.plan],
+            price = row[Courses.price]
         )
     }
 
@@ -50,6 +51,7 @@ class DAOCourses: DAOTable<Course, Courses, CourseBody>() {
                 it[description] = model.description
                 it[cover] = model.cover
                 it[plan] = model.plan
+                it[price] = model.price
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -61,6 +63,7 @@ class DAOCourses: DAOTable<Course, Courses, CourseBody>() {
                 it[description] = model.description
                 it[cover] = model.cover
                 it[plan] = model.plan
+                it[price] = model.price
             } > 0
         }
     }

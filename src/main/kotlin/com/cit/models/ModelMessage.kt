@@ -10,5 +10,5 @@ data class ModelMessage(
     val message: String,
     val user: ModelHuman,
     var isYou: Boolean = false,
-    val datetime: String = LocalDateTime.now().format(DateTimeUtils.dateTimeFormatter)
+    val datetime: String
 )

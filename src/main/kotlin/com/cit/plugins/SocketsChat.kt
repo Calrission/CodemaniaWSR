@@ -4,11 +4,13 @@ import com.cit.models.Connection
 import com.cit.models.ModelMessage
 import com.cit.models.ModelSystemMessage
 import com.cit.usersController
+import com.cit.utils.DateTimeUtils
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import java.lang.Exception
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.LinkedHashSet
 
@@ -28,7 +30,7 @@ fun Application.configureChat() {
                 for (frame in incoming) {
                     frame as? Frame.Text ?: continue
                     val receivedText = frame.readText()
-                    val modelMessage = ModelMessage(receivedText, connection.user.toModelHuman())
+                    val modelMessage = ModelMessage(receivedText, connection.user.toModelHuman(), datetime = LocalDateTime.now().format(DateTimeUtils.dateTimeFormatter))
                     connections.forEach {
                         modelMessage.isYou = connection == it
                         it.session.sendSerialized(modelMessage)

@@ -22,6 +22,8 @@ val tagsController = TagsController()
 val identityController = IdentityController()
 val usersController = UsersController()
 val materialsController = MaterialsController()
+val workSpaceController = WorkSpaceController()
+val lessonsController = LessonsController()
 
 fun main(args: Array<String>) {
 
@@ -50,10 +52,9 @@ fun Application.module() {
 
     initDataBase()
 
-    configureSecurity()
-
     configureIdentityRouting()
     configureCatalog()
     configureFilesRouting()
     configureChatSockets()
+    configureWorkSpace()
 }

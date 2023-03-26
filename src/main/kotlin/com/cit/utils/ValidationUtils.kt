@@ -1,5 +1,10 @@
 package com.cit.utils
 
+import com.cit.enums.DirectionDay
+import com.cit.models.ModelAnswer
+import com.cit.utils.DateTimeUtils.Companion.parseFormatter
+import io.ktor.http.*
+import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern.compile
 
 class ValidationUtils {
@@ -16,6 +21,23 @@ class ValidationUtils {
 
         fun String.isValidEmail(): Boolean{
             return emailRegex.matcher(this).matches()
+        }
+
+        fun localDateValidation(date: String, pattern: String): ModelAnswer<Unit>{
+            val valid = date.parseFormatter(DateTimeFormatter.ofPattern(pattern)) != null
+            return if (valid)
+                ModelAnswer()
+            else
+                ModelAnswer(isError = true, messageError = "$date not valid date, please check by pattern: $pattern")
+        }
+
+        fun directionDayValidation(direction: String): ModelAnswer<Unit>{
+            val allVariants = DirectionDay.getAllMessages()
+            val valid = direction in allVariants
+            return if(valid)
+                ModelAnswer()
+            else
+                ModelAnswer(isError = true, messageError = "$direction - is not direction of day, please check exist in $allVariants")
         }
     }
 }

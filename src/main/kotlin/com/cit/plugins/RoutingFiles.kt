@@ -3,6 +3,7 @@ package com.cit.plugins
 import com.cit.usersController
 import com.cit.utils.DateTimeUtils.Companion.getDateTimeFilename
 import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
+import com.cit.utils.receivePathParameter
 import com.cit.utils.receiveQueryParameter
 import com.cit.utils.respondError
 import io.ktor.http.*
@@ -33,10 +34,13 @@ fun Application.configureFilesRouting(){
             call.respond(HttpStatusCode.OK, result)
         }
 
-        get("images"){
-            val filename = call.receiveQueryParameter("filename")
+        get("img/{filename}"){
+            val filename = call.receivePathParameter("filename") ?: return@get
             val file = File("$imageDirectory/$filename")
-            call.respondFile(file)
+            if (file.exists())
+                call.respondFile(file)
+            else
+                call.respond(HttpStatusCode.NotFound)
         }
     }
 }

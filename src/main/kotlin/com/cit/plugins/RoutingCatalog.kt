@@ -4,7 +4,7 @@ import com.cit.catalogController
 import com.cit.materialsController
 import com.cit.models.ModelAnswer
 import com.cit.utils.receiveQueryParameter
-import com.cit.utils.receiveUserFromToken
+import com.cit.utils.receiveUserByQueryToken
 import com.cit.utils.respondModelAnswer
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -17,7 +17,7 @@ fun Application.configureCatalog(){
         }
 
         get("catalog/courses"){
-            val idUser = call.receiveUserFromToken()?.id
+            val idUser = call.receiveUserByQueryToken(respondError = false)?.id
             call.respondModelAnswer(catalogController.respondCatalogCourses(idUser))
         }
 

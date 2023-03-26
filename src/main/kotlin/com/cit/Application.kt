@@ -55,6 +55,6 @@ fun Application.module() {
     configureIdentityRouting()
     configureCatalog()
     configureFilesRouting()
-    configureChatSockets()
+    configureChat()
     configureWorkSpace()
 }

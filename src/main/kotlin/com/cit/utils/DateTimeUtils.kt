@@ -9,10 +9,12 @@ class DateTimeUtils {
     companion object {
         const val datePattern = "dd.MM.yyyy"
         const val timePattern = "HH:mm"
+        const val datetimePattern = "$datePattern $timePattern"
         const val filenamePattern = "ddMMyyyyHHmm"
 
         val dateFormatter = DateTimeFormatter.ofPattern(datePattern)
         val timeFormatter = DateTimeFormatter.ofPattern(timePattern)
+        val dateTimeFormatter = DateTimeFormatter.ofPattern(datetimePattern)
         val filenamePatternFormatter = DateTimeFormatter.ofPattern(filenamePattern)
 
         fun String.parseFormatter(formatter: DateTimeFormatter): LocalDate? {

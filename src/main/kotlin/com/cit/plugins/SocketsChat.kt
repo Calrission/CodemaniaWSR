@@ -12,7 +12,7 @@ import java.lang.Exception
 import java.util.*
 import kotlin.collections.LinkedHashSet
 
-fun Application.configureChatSockets() {
+fun Application.configureChat() {
     routing {
         val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
         webSocket("/chat"){
@@ -30,6 +30,7 @@ fun Application.configureChatSockets() {
                     val receivedText = frame.readText()
                     val modelMessage = ModelMessage(receivedText, connection.user.toModelHuman())
                     connections.forEach {
+                        modelMessage.isYou = connection == it
                         it.session.sendSerialized(modelMessage)
                     }
                 }

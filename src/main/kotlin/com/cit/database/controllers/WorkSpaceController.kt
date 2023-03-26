@@ -17,13 +17,13 @@ class WorkSpaceController {
         idCourse: Int?
     ): ModelAnswer<List<Lesson>>{
         var targetDate = date ?: lessonsController.getNearDateWithLessonsUser(idUser, LocalDateTime.now())
-        targetDate = (if (directionDay == null) targetDate else directionDay.getDirectionDateNow(idUser))
+        targetDate = (if (directionDay == null) targetDate else directionDay.getDateDirectionByNow(idUser))
             ?: return ModelAnswer(HttpStatusCode.NotFound, isError = true, messageError = "Для указаной даты/направления даты занятий нет")
         val lessons = lessonsController.getLessonsUserByDate(idUser, targetDate).filter { it.idCourse == idCourse }
         return ModelAnswer(answer = lessons)
     }
 
-    private suspend fun DirectionDay.getDirectionDateNow(idUser: Int): LocalDate?{
+    private suspend fun DirectionDay.getDateDirectionByNow(idUser: Int): LocalDate?{
         if (this == DirectionDay.NEXT)
             return lessonsController.getNextDateWithLessonUser(idUser, LocalDate.now())
         else if (this == DirectionDay.PREV)

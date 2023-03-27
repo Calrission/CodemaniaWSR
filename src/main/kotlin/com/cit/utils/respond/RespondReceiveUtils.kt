@@ -42,8 +42,6 @@ suspend inline fun ApplicationCall.receiveQueryToken(respondError: Boolean = tru
     return token
 }
 
-
-
 suspend inline fun ApplicationCall.receiveQueryParameters(requiredParameters: List<String>): Map<String, String>? {
     val data = requiredParameters.associateWith { request.queryParameters[it] }
     val notExistParameters = requiredParameters.filter { data[it] == null }
@@ -125,3 +123,4 @@ suspend inline fun <reified T : Validation> ApplicationCall.receiveValidation():
     respondError(error = resultValidation.error ?: "Unknown error")
     return null
 }
+

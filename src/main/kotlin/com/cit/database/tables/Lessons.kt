@@ -1,5 +1,6 @@
 package com.cit.database.tables
 
+import com.cit.utils.DateTimeUtils
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
@@ -27,6 +28,24 @@ data class Lesson(
     val title: String,
     val description: String,
     val datetime: LocalDateTime,
+    val duration: Int,
+    val isComplete: Boolean,
+    val file: String?,
+    val commentFile: String?,
+){
+    fun toModelLesson(): ModelLesson = ModelLesson(
+        id, idUser, title, description,
+        datetime.format(DateTimeUtils.dateTimeFormatter),
+        duration, isComplete, file, commentFile
+    )
+}
+@Serializable
+data class ModelLesson(
+    val id: Int,
+    val idCourse: Int,
+    val title: String,
+    val description: String,
+    val datetime: String,
     val duration: Int,
     val isComplete: Boolean,
     val file: String?,

@@ -78,4 +78,11 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody>() {
         }
     }
 
+    suspend fun edit(confirmLesson: Boolean, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
+        return pushQuery {
+            Lessons.update(where) {
+                it[isComplete] = confirmLesson
+            } > 0
+        }
+    }
 }

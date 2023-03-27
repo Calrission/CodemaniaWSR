@@ -3,6 +3,7 @@ package com.cit.database.controllers
 import com.cit.database.dao.DAOLessons
 import com.cit.database.tables.Lesson
 import com.cit.database.tables.Lessons
+import com.cit.database.tables.Users
 import org.jetbrains.exposed.sql.and
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -11,6 +12,18 @@ import java.time.ZoneOffset
 class LessonsController {
 
     private val daoLesson = DAOLessons()
+
+    suspend fun getLesson(idLesson: Int, idUser: Int): Lesson?{
+        return daoLesson.selectSingle {
+            (Lessons.idUser eq idUser).and(Lessons.id eq idLesson)
+        }
+    }
+
+    suspend fun setConfirmLesson(idLesson: Int, idUser: Int): Boolean{
+        return daoLesson.edit(true){
+            (Lessons.idUser eq idUser).and(Lessons.id eq idLesson)
+        }
+    }
 
     suspend fun getAllLessonsUser(userId: Int): List<Lesson>{
         return daoLesson.selectMany {
@@ -22,6 +35,15 @@ class LessonsController {
         return daoLesson.selectMany {
             (Lessons.datetime.between(date.atTime(0, 0, 0), date.atTime(23, 59, 59)))
                 .and(Lessons.idUser.eq(idUser))
+        }
+    }
+
+    suspend fun getDelayLessons(idUser: Int): List<Lesson>{
+        return daoLesson.selectMany {
+            Lessons.datetime
+                .between(LocalDateTime.MIN, LocalDateTime.now())
+                .and(Lessons.idUser eq idUser)
+                .and(Lessons.isComplete eq false)
         }
     }
 

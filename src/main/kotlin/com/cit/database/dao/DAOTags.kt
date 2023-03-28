@@ -5,7 +5,7 @@ import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.*
 import org.jetbrains.exposed.sql.*
 
-class DAOTags: DAOTable<Tag, Tags, TagBody>() {
+class DAOTags: DAOTable<Tag, Tags, TagBody, TagBody>() {
     override fun resultRowToModel(row: ResultRow): Tag {
         return Tag(
             id = row[Tags.id],

@@ -5,7 +5,7 @@ import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.*
 import org.jetbrains.exposed.sql.*
 
-class DAOMaterials: DAOTable<Material, Materials, MaterialBody>() {
+class DAOMaterials: DAOTable<Material, Materials, MaterialBody, MaterialBody>() {
     override fun resultRowToModel(row: ResultRow): Material {
         return Material(
             id = row[Materials.id],

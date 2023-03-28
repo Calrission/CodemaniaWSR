@@ -123,3 +123,15 @@ suspend inline fun <reified T : Validation> ApplicationCall.receiveValidation():
     return null
 }
 
+suspend inline fun ApplicationCall.receiveByteArray(
+    respondError: Boolean = true
+): ByteArray? {
+    var binaryData: ByteArray? = receive()
+    binaryData = if (binaryData!!.isEmpty()) null else binaryData
+    if (binaryData == null && respondError){
+        respondError(error = "File not upload, please check existing")
+        return null
+    }
+    return binaryData
+}
+

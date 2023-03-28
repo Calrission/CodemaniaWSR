@@ -3,16 +3,14 @@ package com.cit.database.dao
 import com.cit.database.DAOTable
 import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.User
-import com.cit.database.tables.UserBody
+import com.cit.database.tables.InsertUserBody
+import com.cit.database.tables.PatchUserBody
 import com.cit.database.tables.Users
 import com.cit.enums.Sex.Companion.isSex
 import com.cit.models.bodies.IdentityBody
-import com.cit.models.bodies.SignUpBody
-import com.cit.utils.DateTimeUtils.Companion.parseDate
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
-class DAOUser: DAOTable<User, Users, UserBody>() {
+class DAOUser: DAOTable<User, Users, InsertUserBody, PatchUserBody>() {
     override fun resultRowToModel(row: ResultRow): User {
         return User(
             id = row[Users.id],
@@ -47,7 +45,7 @@ class DAOUser: DAOTable<User, Users, UserBody>() {
 
     }
 
-    override suspend fun insert(model: UserBody): User? {
+    override suspend fun insert(model: InsertUserBody): User? {
         return pushQuery {
             Users.insert {
                 it[firstname] = model.firstname
@@ -68,17 +66,21 @@ class DAOUser: DAOTable<User, Users, UserBody>() {
         }
     }
 
-    override suspend fun edit(model: UserBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
+    override suspend fun edit(model: PatchUserBody, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return pushQuery {
             Users.update(where) {
-                it[firstname] = model.firstname
-                it[lastname] = model.lastname
-                it[patronymic] = model.patronymic
-                it[sex] = model.sex
-                it[avatar] = model.avatar
-                it[email] = model.email
-                it[password] = model.password
-                it[dateBirthDay] = model.dateBirthDay
+                if (model.firstname != null)
+                    it[firstname] = model.firstname
+                if (model.lastname != null)
+                    it[lastname] = model.lastname
+                if (model.patronymic != null)
+                    it[patronymic] = model.patronymic
+                if (model.sex != null)
+                    it[sex] = model.sex.valueInt
+                if (model.email != null)
+                    it[email] = model.email
+                if (model.dateBirthDay != null)
+                    it[dateBirthDay] = model.dateBirthDay
             } > 0
         }
     }

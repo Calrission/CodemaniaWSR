@@ -32,4 +32,9 @@ class UsersController {
         CourseMentors.idCourse eq idCourse
     }.map { it.idUser }
 
+    suspend fun patchUser(idUser: Int, userBody: PatchUserBody): User?{
+        return daoUser.editAndSelect(userBody){
+            Users.id eq idUser
+        }
+    }
 }

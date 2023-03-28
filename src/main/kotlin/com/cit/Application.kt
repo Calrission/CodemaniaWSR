@@ -24,6 +24,7 @@ val usersController = UsersController()
 val materialsController = MaterialsController()
 val workSpaceController = WorkSpaceController()
 val lessonsController = LessonsController()
+val profileController = ProfileController()
 
 fun main(args: Array<String>) {
 
@@ -57,4 +58,5 @@ fun Application.module() {
     configureFilesRouting()
     configureChat()
     configureWorkSpace()
+    configureProfile()
 }

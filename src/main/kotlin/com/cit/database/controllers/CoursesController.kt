@@ -5,6 +5,7 @@ import com.cit.database.dao.DAOSoldCourses
 import com.cit.database.tables.*
 import com.cit.tagsController
 import com.cit.usersController
+import org.jetbrains.exposed.sql.and
 
 class CoursesController {
     private val daoCourses = DAOCourses()
@@ -21,6 +22,10 @@ class CoursesController {
         val tags = tagsController.getTagsCourse(id).map { it.id }
         val mentors = usersController.getMentorsCourse(id)
         return toModelCourse(tags, mentors)
+    }
+
+    suspend fun checkBuyCourseUser(idUser: Int, idCourse: Int): Boolean{
+        return daoSoldCourse.selectSingle { SoldCourses.idUser.eq(idUser).and(SoldCourses.idCourse eq idCourse) } != null
     }
 
 }

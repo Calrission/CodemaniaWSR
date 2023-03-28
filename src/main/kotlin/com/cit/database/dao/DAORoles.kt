@@ -7,7 +7,7 @@ import com.cit.database.tables.RoleBody
 import com.cit.database.tables.Roles
 import org.jetbrains.exposed.sql.*
 
-class DAORoles: DAOTable<ModelRole, Roles, RoleBody>() {
+class DAORoles: DAOTable<ModelRole, Roles, RoleBody, RoleBody>() {
     override fun resultRowToModel(row: ResultRow): ModelRole {
         return ModelRole(
             id = row[Roles.id],

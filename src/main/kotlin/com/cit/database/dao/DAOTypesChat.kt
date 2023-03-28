@@ -7,7 +7,7 @@ import com.cit.database.tables.TypeChatBody
 import com.cit.database.tables.TypesChat
 import org.jetbrains.exposed.sql.*
 
-class DAOTypesChat: DAOTable<TypeChat, TypesChat, TypeChatBody>() {
+class DAOTypesChat: DAOTable<TypeChat, TypesChat, TypeChatBody, TypeChatBody>() {
     override fun resultRowToModel(row: ResultRow): TypeChat {
         return TypeChat(
             id = row[TypesChat.id],

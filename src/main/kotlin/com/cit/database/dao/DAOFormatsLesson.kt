@@ -7,7 +7,7 @@ import com.cit.database.tables.FormatLessonBody
 import com.cit.database.tables.FormatsLesson
 import org.jetbrains.exposed.sql.*
 
-class DAOFormatsLesson: DAOTable<FormatLesson, FormatsLesson, FormatLessonBody>() {
+class DAOFormatsLesson: DAOTable<FormatLesson, FormatsLesson, FormatLessonBody, FormatLessonBody>() {
     override fun resultRowToModel(row: ResultRow): FormatLesson {
         return FormatLesson(
             id = row[FormatsLesson.id],

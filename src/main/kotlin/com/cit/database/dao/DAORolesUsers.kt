@@ -5,7 +5,7 @@ import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.*
 import org.jetbrains.exposed.sql.*
 
-class DAORolesUsers: DAOTable<RoleUser, RolesUsers, RoleUserBody>() {
+class DAORolesUsers: DAOTable<RoleUser, RolesUsers, RoleUserBody, RoleUserBody>() {
     override fun resultRowToModel(row: ResultRow): RoleUser {
         return RoleUser(
             id = row[RolesUsers.id],

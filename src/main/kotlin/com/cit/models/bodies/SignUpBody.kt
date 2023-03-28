@@ -1,6 +1,6 @@
 package com.cit.models.bodies
 
-import com.cit.database.tables.UserBody
+import com.cit.database.tables.InsertUserBody
 import com.cit.enums.Sex
 import com.cit.enums.Sex.Companion.isSex
 import com.cit.interfaces.ResultValidation
@@ -20,7 +20,7 @@ data class SignUpBody(
     val sex: String,
     val dateBirthDay: String,
 ): IdentityBody(){
-    fun toUserBody(): UserBody = UserBody(
+    fun toUserBody(): InsertUserBody = InsertUserBody(
         email, password, firstname, lastname, patronymic,
         null, sex.isSex()!!.valueInt, dateBirthDay.parseDate()!!
     )

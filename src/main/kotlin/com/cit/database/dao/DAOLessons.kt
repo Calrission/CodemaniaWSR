@@ -5,7 +5,7 @@ import com.cit.database.DatabaseFactory.pushQuery
 import com.cit.database.tables.*
 import org.jetbrains.exposed.sql.*
 
-class DAOLessons: DAOTable<Lesson, Lessons, LessonBody>() {
+class DAOLessons: DAOTable<Lesson, Lessons, LessonBody, LessonBody>() {
     override fun resultRowToModel(row: ResultRow): Lesson {
         return Lesson(
             id = row[Lessons.id],

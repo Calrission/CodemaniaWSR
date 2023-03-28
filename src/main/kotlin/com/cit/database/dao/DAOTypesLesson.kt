@@ -7,7 +7,7 @@ import com.cit.database.tables.TypeLessonBody
 import com.cit.database.tables.TypesLesson
 import org.jetbrains.exposed.sql.*
 
-class DAOTypesLesson: DAOTable<TypeLesson, TypesLesson, TypeLessonBody>() {
+class DAOTypesLesson: DAOTable<TypeLesson, TypesLesson, TypeLessonBody, TypeLessonBody>() {
     override fun resultRowToModel(row: ResultRow): TypeLesson {
         return TypeLesson(
             id = row[TypesLesson.id],

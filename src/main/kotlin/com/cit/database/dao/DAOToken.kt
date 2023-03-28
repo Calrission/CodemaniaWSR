@@ -7,7 +7,7 @@ import com.cit.database.tables.TokenBody
 import com.cit.database.tables.Tokens
 import org.jetbrains.exposed.sql.*
 
-class DAOToken: DAOTable<Token, Tokens, TokenBody>() {
+class DAOToken: DAOTable<Token, Tokens, TokenBody, TokenBody>() {
     override fun resultRowToModel(row: ResultRow): Token {
         return Token(
             id = row[Tokens.id],

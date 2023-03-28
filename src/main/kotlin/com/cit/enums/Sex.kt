@@ -8,5 +8,7 @@ enum class Sex(val valueStr: String, val valueInt: Int) {
         fun getAllValueInt(): List<Int> = Sex.values().map { it.valueInt }
 
         fun String.isSex(): Sex? = Sex.values().singleOrNull { it.valueStr == this }
+
+        fun Int.isSex(): Sex? = Sex.values().singleOrNull { it.valueInt == this }
     }
 }

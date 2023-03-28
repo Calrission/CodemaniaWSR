@@ -7,7 +7,7 @@ import com.cit.database.tables.CourseMentorBody
 import com.cit.database.tables.CourseMentors
 import org.jetbrains.exposed.sql.*
 
-class DAOCourseMentors: DAOTable<CourseMentor, CourseMentors, CourseMentorBody>() {
+class DAOCourseMentors: DAOTable<CourseMentor, CourseMentors, CourseMentorBody, CourseMentorBody>() {
     override fun resultRowToModel(row: ResultRow): CourseMentor {
         return CourseMentor(
             id = row[CourseMentors.id],

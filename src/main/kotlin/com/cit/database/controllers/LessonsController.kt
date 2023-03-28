@@ -41,7 +41,7 @@ class LessonsController {
     suspend fun getDelayLessons(idUser: Int): List<Lesson>{
         return daoLesson.selectMany {
             Lessons.datetime
-                .between(LocalDateTime.MIN, LocalDateTime.now())
+                .between(LocalDateTime.of(0, 1, 1, 0, 0, 0), LocalDateTime.now())
                 .and(Lessons.idUser eq idUser)
                 .and(Lessons.isComplete eq false)
         }
@@ -74,7 +74,7 @@ class LessonsController {
     suspend fun getNextDateWithLessonUser(idUser: Int, startDate: LocalDate): LocalDate?{
         val lessons = getAllLessonsUser(idUser)
         val nextDate = lessons
-            .filter { startDate.isAfter(LocalDate.now()) }
+            .filter { it.datetime.toLocalDate().isAfter(startDate) }
             .minOfOrNull { it.datetime.toLocalDate() }
         return nextDate
     }
@@ -82,7 +82,7 @@ class LessonsController {
     suspend fun getPrevDateWithLesson(idUser: Int, endDate: LocalDate): LocalDate?{
         val lessons = getAllLessonsUser(idUser)
         val prevDate = lessons
-            .filter { endDate.isBefore(LocalDate.now()) }
+            .filter { it.datetime.toLocalDate().isBefore(endDate) }
             .maxOfOrNull { it.datetime.toLocalDate() }
         return prevDate
     }

@@ -6,8 +6,7 @@ import com.cit.database.tables.User
 import com.cit.database.tables.InsertUserBody
 import com.cit.database.tables.PatchUserBody
 import com.cit.database.tables.Users
-import com.cit.enums.Sex.Companion.isSex
-import com.cit.models.bodies.IdentityBody
+import com.cit.models.bodies.IdentityBase
 import org.jetbrains.exposed.sql.*
 
 class DAOUser: DAOTable<User, Users, InsertUserBody, PatchUserBody>() {
@@ -85,7 +84,7 @@ class DAOUser: DAOTable<User, Users, InsertUserBody, PatchUserBody>() {
         }
     }
 
-    suspend fun getUser(identityBody: IdentityBody): User?{
+    suspend fun getUser(identityBody: IdentityBase): User?{
         return selectSingle { (Users.email eq identityBody.email).and(Users.password eq identityBody.password) }
     }
 

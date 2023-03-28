@@ -18,19 +18,21 @@ class WorkSpaceController {
         idUser: Int,
         directionDay: DirectionDay?,
         idCourse: Int?
-    ): ModelAnswer<List<Lesson>>{
+    ): ModelAnswer<List<ModelLesson>>{
         var targetDate = date ?: lessonsController.getNearDateWithLessonsUser(idUser, LocalDateTime.now())
-        targetDate = (if (directionDay == null) targetDate else directionDay.getDateDirectionByNow(idUser))
+        targetDate = (if (directionDay == null) targetDate else (if (targetDate != null) directionDay.getDateDirectionByNow(idUser, targetDate) else null))
             ?: return "Для указаной даты/направления даты занятий нет".asError(HttpStatusCode.NotFound)
-        val lessons = lessonsController.getLessonsUserByDate(idUser, targetDate).filter { it.idCourse == idCourse }
+        val lessons = lessonsController.getLessonsUserByDate(idUser, targetDate)
+            .filter { if (idCourse != null) it.idCourse == idCourse else true }
+            .map { it.toModelLesson() }
         return lessons.asAnswer()
     }
 
-    private suspend fun DirectionDay.getDateDirectionByNow(idUser: Int): LocalDate?{
+    private suspend fun DirectionDay.getDateDirectionByNow(idUser: Int, dateTarget: LocalDate): LocalDate?{
         if (this == DirectionDay.NEXT)
-            return lessonsController.getNextDateWithLessonUser(idUser, LocalDate.now())
+            return lessonsController.getNextDateWithLessonUser(idUser, dateTarget)
         else if (this == DirectionDay.PREV)
-            return lessonsController.getPrevDateWithLesson(idUser, LocalDate.now())
+            return lessonsController.getPrevDateWithLesson(idUser, dateTarget)
         return null
     }
 
@@ -44,6 +46,7 @@ class WorkSpaceController {
     }
 
     suspend fun respondDelayLessons(idUser: Int): ModelAnswer<List<ModelLesson>>{
-        return lessonsController.getDelayLessons(idUser).map() { it.toModelLesson() }.asAnswer()
+        val lessons = lessonsController.getDelayLessons(idUser)
+        return lessons.map { it.toModelLesson() }.asAnswer()
     }
 }

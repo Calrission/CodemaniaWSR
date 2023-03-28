@@ -19,7 +19,7 @@ data class SignUpBody(
     val patronymic: String,
     val sex: String,
     val dateBirthDay: String,
-): IdentityBody(){
+): IdentityBase(){
     fun toUserBody(): InsertUserBody = InsertUserBody(
         email, password, firstname, lastname, patronymic,
         null, sex.isSex()!!.valueInt, dateBirthDay.parseDate()!!

@@ -4,7 +4,7 @@ import com.cit.interfaces.ResultValidation
 import com.cit.interfaces.Validation
 import com.cit.utils.ValidationUtils.Companion.isValidEmail
 
-abstract class IdentityBody: Validation{
+abstract class IdentityBase: Validation{
     abstract val email: String
     abstract val password: String
 

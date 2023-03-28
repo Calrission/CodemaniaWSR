@@ -9,13 +9,13 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody, LessonBody>() {
     override fun resultRowToModel(row: ResultRow): Lesson {
         return Lesson(
             id = row[Lessons.id],
+            idCourse = row[Lessons.idCourse],
+            idUser = row[Lessons.idUser],
             title = row[Lessons.title],
             description = row[Lessons.description],
             datetime = row[Lessons.datetime],
             duration = row[Lessons.duration],
             isComplete = row[Lessons.isComplete],
-            idCourse = row[Lessons.idCourse],
-            idUser = row[Lessons.idUser],
             file = row[Lessons.file],
             commentFile = row[Lessons.commentFile]
         )

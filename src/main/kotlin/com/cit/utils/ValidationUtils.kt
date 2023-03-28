@@ -3,7 +3,6 @@ package com.cit.utils
 import com.cit.enums.DirectionDay
 import com.cit.models.ModelAnswer
 import com.cit.utils.DateTimeUtils.Companion.parseFormatter
-import io.ktor.http.*
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern.compile
 

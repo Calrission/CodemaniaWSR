@@ -1,6 +1,5 @@
 package com.cit.utils
 
-import com.cit.database.dao.DAOToken
 import com.cit.database.tables.User
 import com.cit.interfaces.Validation
 import com.cit.models.ModelAnswer
@@ -106,11 +105,11 @@ suspend inline fun ApplicationCall.receiveUserByQueryToken(respondError: Boolean
     return user
 }
 
-suspend inline fun <reified T> ApplicationCall.respondModelAnswer(modelAnswer: ModelAnswer<T>){
+suspend inline fun <reified T> ApplicationCall.respond(modelAnswer: ModelAnswer<T>){
     if (modelAnswer.isError) {
         respondError(modelAnswer.httpStatusCode, modelAnswer.messageError)
     }else{
-        respond(modelAnswer.httpStatusCode, modelAnswer.answer!!)
+        this@respond.respond(modelAnswer.httpStatusCode, modelAnswer.answer!!)
     }
 }
 

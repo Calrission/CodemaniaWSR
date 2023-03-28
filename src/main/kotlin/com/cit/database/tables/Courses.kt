@@ -30,7 +30,7 @@ data class Course(
     val plan: String,
     val price: Int
 ){
-    fun toModelCourse(tags: List<Tag>, mentors: List<ModelHuman>) = ModelCourse(id, title, description, tags, mentors, cover, plan, price)
+    fun toModelCourse(tagsIds: List<Int>, mentors: List<ModelHuman>) = ModelCourse(id, title, description, tagsIds, mentors, cover, plan, price)
 }
 
 @Serializable
@@ -38,7 +38,7 @@ data class ModelCourse(
     val id: Int,
     val title: String,
     val description: String,
-    val tags: List<Tag>,
+    val tags: List<Int>,
     val mentors: List<ModelHuman>,
     val cover: String,
     val plan: String,
@@ -51,7 +51,7 @@ data class ModelCourse(
 data class ModelCourseShort(
     val id: Int,
     val title: String,
-    val tags: List<Tag>,
+    val tags: List<Int>,
     val cover: String,
     val price: Int
 )

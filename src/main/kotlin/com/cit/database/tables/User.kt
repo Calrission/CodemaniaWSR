@@ -12,15 +12,22 @@ data class ModelHuman(
     val lastname: String,
     val patronymic: String,
     val avatar: String?,
-    val id: Int
+    val id: Int,
 )
+
+@Serializable
+data class IdentityResponse(
+    val user: ModelHuman,
+    val token: String
+)
+
 @Serializable
 data class ModelProfile(
+    val id: Int,
     val firstname: String,
     val lastname: String,
     val patronymic: String,
     val avatar: String?,
-    val id: Int,
     val courses: List<ModelCourseShort>
 )
 

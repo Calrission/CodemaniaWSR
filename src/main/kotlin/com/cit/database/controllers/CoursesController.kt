@@ -18,7 +18,7 @@ class CoursesController {
     suspend fun getCourse(idCourse: Int): ModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toModelCourse()
 
     private suspend fun Course.toModelCourse(): ModelCourse{
-        val tags = tagsController.getTagsCourse(id)
+        val tags = tagsController.getTagsCourse(id).map { it.id }
         val mentors = usersController.getMentorsCourse(id)
         return toModelCourse(tags, mentors)
     }

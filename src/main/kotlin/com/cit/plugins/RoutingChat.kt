@@ -1,11 +1,11 @@
 package com.cit.plugins
 
+import com.cit.chatController
 import com.cit.models.Connection
 import com.cit.models.ModelMessage
 import com.cit.models.ModelSystemMessage
 import com.cit.usersController
-import com.cit.utils.DateTimeUtils
-import com.cit.utils.receiveUserByQueryToken
+import com.cit.utils.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
@@ -50,7 +50,13 @@ fun Application.configureChat() {
 
         get("chats"){
             val user = call.receiveUserByQueryToken() ?: return@get
+            call.respondAnswer(chatController.respondUserChats(user.id))
+        }
 
+        get("chat"){
+            val user = call.receiveUserByQueryToken() ?: return@get
+            val idChat = call.receivePathParameter("idChat")?.toInt() ?: return@get
+            call.respondAnswer(chatController.respondChat(user.id, idChat))
         }
     }
 }

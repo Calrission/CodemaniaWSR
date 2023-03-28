@@ -1,5 +1,6 @@
 package com.cit.database.tables
 
+import com.cit.usersController
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
@@ -11,15 +12,29 @@ object Chats: Table() {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
+@Serializable
 data class Chat(
     val id: Int,
     val firstIdUser: Int,
     val secondIdUser: Int
-)
+){
+    suspend fun toModelChat(): ModelChat? {
+        val first = usersController.getUser(firstIdUser)?.toModelHuman() ?: return null
+        val second = usersController.getUser(secondIdUser)?.toModelHuman() ?: return null
+        return ModelChat(id, first, second)
+    }
+}
 
 @Serializable
 data class ModelChat(
     val id: Int,
     val first: ModelHuman,
     val second: ModelHuman
+){
+    fun addMessages(messages: List<SafeMessage>): ChatWithMessages = ChatWithMessages(this, messages)
+}
+@Serializable
+data class ChatWithMessages(
+    val chat: ModelChat,
+    val messages: List<SafeMessage>
 )

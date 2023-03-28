@@ -30,7 +30,20 @@ data class Message(
         id, idChat, text, datetime.format(DateTimeUtils.dateTimeFormatter),
         modelHuman, isAudio
     )
+
+    fun toSafe(): SafeMessage = SafeMessage(
+        id, idChat, text, datetime.format(DateTimeUtils.dateTimeFormatter), idUser, isAudio
+    )
 }
+@Serializable
+data class SafeMessage(
+    val id: Int,
+    val idChat: Int,
+    val text: String,
+    val datetime: String,
+    val idUser: Int,
+    val isAudio: Boolean
+)
 
 @Serializable
 data class ReceiveInsertMessage(

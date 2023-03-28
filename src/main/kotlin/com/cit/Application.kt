@@ -25,6 +25,7 @@ val materialsController = MaterialsController()
 val workSpaceController = WorkSpaceController()
 val lessonsController = LessonsController()
 val profileController = ProfileController()
+val chatController = ChatController()
 
 fun main(args: Array<String>) {
 

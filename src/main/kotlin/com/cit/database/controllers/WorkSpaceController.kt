@@ -1,6 +1,5 @@
 package com.cit.database.controllers
 
-import com.cit.database.tables.Lesson
 import com.cit.database.tables.ModelLesson
 import com.cit.enums.DirectionDay
 import com.cit.lessonsController

@@ -2,7 +2,7 @@ package com.cit.utils
 
 import com.cit.enums.DirectionDay
 import com.cit.models.ModelAnswer
-import com.cit.utils.DateTimeUtils.Companion.parseFormatter
+import com.cit.utils.DateTimeUtils.Companion.parseDateFormatter
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern.compile
 
@@ -23,7 +23,7 @@ class ValidationUtils {
         }
 
         fun localDateValidation(date: String, pattern: String): ModelAnswer<Unit>{
-            val valid = date.parseFormatter(DateTimeFormatter.ofPattern(pattern)) != null
+            val valid = date.parseDateFormatter(DateTimeFormatter.ofPattern(pattern)) != null
             return if (valid)
                 ModelAnswer()
             else

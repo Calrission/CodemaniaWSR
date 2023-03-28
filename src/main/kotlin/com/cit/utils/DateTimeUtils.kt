@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.time.temporal.Temporal
 
 class DateTimeUtils {
     companion object {
@@ -17,15 +18,24 @@ class DateTimeUtils {
         val dateTimeFormatter = DateTimeFormatter.ofPattern(datetimePattern)
         val filenamePatternFormatter = DateTimeFormatter.ofPattern(filenamePattern)
 
-        fun String.parseFormatter(formatter: DateTimeFormatter): LocalDate? {
+        fun String.parseDateFormatter(formatter: DateTimeFormatter): LocalDate? {
             return try {
                 LocalDate.parse(this, formatter)
             }catch (e: DateTimeParseException){
                 null
             }
         }
-        fun String.parseDate(): LocalDate? = parseFormatter(dateFormatter)
-        fun String.parseTime(): LocalDate? = parseFormatter(timeFormatter)
+
+        fun String.parseDateTimeFormatter(formatter: DateTimeFormatter): LocalDateTime? {
+            return try {
+                LocalDateTime.parse(this, formatter)
+            }catch (e: DateTimeParseException){
+                null
+            }
+        }
+        fun String.parseDate(): LocalDate? = parseDateFormatter(dateFormatter)
+        fun String.parseTime(): LocalDate? = parseDateFormatter(timeFormatter)
+        fun String.parseDateTime(): LocalDateTime? = parseDateTimeFormatter(dateTimeFormatter)
         fun nowDate(): String{
             return LocalDate.now().format(dateFormatter)
         }

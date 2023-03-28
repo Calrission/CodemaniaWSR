@@ -3,7 +3,6 @@ package com.cit.database.controllers
 import com.cit.database.dao.DAOLessons
 import com.cit.database.tables.Lesson
 import com.cit.database.tables.Lessons
-import com.cit.database.tables.Users
 import org.jetbrains.exposed.sql.and
 import java.time.LocalDate
 import java.time.LocalDateTime

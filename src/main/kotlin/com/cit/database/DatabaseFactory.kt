@@ -39,6 +39,8 @@ object DatabaseFactory{
             SchemaUtils.create(Materials)
             SchemaUtils.create(RolesUsers)
             SchemaUtils.create(Lessons)
+            SchemaUtils.create(Chats)
+            SchemaUtils.create(Messages)
         }
     }
 

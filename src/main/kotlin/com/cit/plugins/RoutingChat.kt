@@ -5,6 +5,7 @@ import com.cit.models.ModelMessage
 import com.cit.models.ModelSystemMessage
 import com.cit.usersController
 import com.cit.utils.DateTimeUtils
+import com.cit.utils.receiveUserByQueryToken
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
@@ -45,6 +46,11 @@ fun Application.configureChat() {
                     it.session.sendSerialized(systemMessage)
                 }
             }
+        }
+
+        get("chats"){
+            val user = call.receiveUserByQueryToken() ?: return@get
+
         }
     }
 }

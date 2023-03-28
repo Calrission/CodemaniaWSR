@@ -28,6 +28,8 @@ class UsersController {
         return daoUser.updateAvatar(avatarName, idUser)
     }
 
+    suspend fun checkExistEmail(email: String): Boolean = daoUser.checkExistEmail(email)
+
     private suspend fun getMentorsIdsCourse(idCourse: Int): List<Int> = daoCourseMentor.selectMany {
         CourseMentors.idCourse eq idCourse
     }.map { it.idUser }

@@ -105,11 +105,11 @@ suspend inline fun ApplicationCall.receiveUserByQueryToken(respondError: Boolean
     return user
 }
 
-suspend inline fun <reified T> ApplicationCall.respond(modelAnswer: ModelAnswer<T>){
+suspend inline fun <reified T> ApplicationCall.respondAnswer(modelAnswer: ModelAnswer<T>){
     if (modelAnswer.isError) {
         respondError(modelAnswer.httpStatusCode, modelAnswer.messageError)
     }else{
-        this@respond.respond(modelAnswer.httpStatusCode, modelAnswer.answer!!)
+        this@respondAnswer.respond(modelAnswer.httpStatusCode, modelAnswer.answer!!)
     }
 }
 

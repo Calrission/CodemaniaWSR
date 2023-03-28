@@ -8,8 +8,10 @@ import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.plugins.imageDirectory
 import com.cit.usersController
 import com.cit.utils.DateTimeUtils
+import com.cit.utils.ValidationUtils.Companion.isValidEmail
 import io.ktor.http.*
 import java.io.File
+import java.time.LocalDate
 
 class ProfileController {
     suspend fun respondProfileCourses(idUser: Int): ModelAnswer<List<ModelCourseShort>> {
@@ -43,6 +45,15 @@ class ProfileController {
     }
 
     suspend fun respondPatchProfile(idUser: Int, pathBody: PatchUserBody): ModelAnswer<PersonData>{
+        if (pathBody.email != null)
+            if (usersController.checkExistEmail(pathBody.email))
+                return "Такая почта уже используется".asError()
+            if (!pathBody.email!!.isValidEmail())
+                return "Почта не корректна".asError()
+        if (pathBody.dateBirthDay != null && pathBody.dateBirthDay.isAfter(LocalDate.now())){
+            return "День рождение не может быть в будущем".asError()
+        }
+
         val user = usersController.patchUser(idUser, pathBody)
         return user?.toPersonData()?.asAnswer() ?: "Ошибка, попробуйте еще раз".asError()
     }

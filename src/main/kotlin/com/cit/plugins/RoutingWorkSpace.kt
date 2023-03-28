@@ -19,27 +19,27 @@ fun Application.configureWorkSpace(){
                 ValidationUtils.directionDayValidation(it)
             }?.asDirectionDay()
             val user = call.receiveUserByQueryToken() ?: return@get
-            call.respond(workSpaceController.respondPlanDate(date, user.id, direction, idCourse))
+            call.respondAnswer(workSpaceController.respondPlanDate(date, user.id, direction, idCourse))
         }
 
         get("workSpace/lesson"){
             val user = call.receiveUserByQueryToken() ?: return@get
             val idLesson = call.receiveQueryParameter("idLesson")?.toInt() ?: return@get
 
-            call.respond(workSpaceController.respondLesson(user.id, idLesson))
+            call.respondAnswer(workSpaceController.respondLesson(user.id, idLesson))
         }
 
         post("workSpace/confirmLesson"){
             val user = call.receiveUserByQueryToken() ?: return@post
             val idLesson = call.receiveQueryParameter("idLesson")?.toInt() ?: return@post
 
-            call.respond(workSpaceController.respondConfirmLesson(idLesson, user.id))
+            call.respondAnswer(workSpaceController.respondConfirmLesson(idLesson, user.id))
         }
 
         get("workSpace/delayLessons"){
             val user = call.receiveUserByQueryToken() ?: return@get
 
-            call.respond(workSpaceController.respondDelayLessons(user.id))
+            call.respondAnswer(workSpaceController.respondDelayLessons(user.id))
         }
     }
 }

@@ -47,12 +47,12 @@ data class InsertUserBody(
 )
 @Serializable
 data class ReceivePatchUserBody(
-    val email: String?,
-    val firstname: String?,
-    val lastname: String?,
-    val patronymic: String?,
-    val sex: String?,
-    val dateBirthDay: String?
+    val email: String? = null,
+    val firstname: String? = null,
+    val lastname: String? = null,
+    val patronymic: String? = null,
+    val sex: String? = null,
+    val dateBirthDay: String? = null
 ){
     fun toPatchUserBody(): PatchUserBody = PatchUserBody(
         email, firstname, lastname,

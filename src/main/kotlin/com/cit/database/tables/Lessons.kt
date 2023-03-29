@@ -25,41 +25,49 @@ data class Lesson(
     val id: Int,
     val idCourse: Int,
     val idUser: Int,
-    val title: String,
-    val description: String,
+    override val title: String,
+    override val description: String,
     val datetime: LocalDateTime,
-    val duration: Int,
+    override val duration: Int,
     val isComplete: Boolean,
     val file: String?,
     val commentFile: String?,
-){
+): LessonBase() {
     fun toModelLesson(): ModelLesson = ModelLesson(
         id, idUser, title, description,
         datetime.format(DateTimeUtils.dateTimeFormatter),
         duration, isComplete, file, commentFile
     )
 }
+
+@Serializable
+sealed class LessonBase {
+    abstract val title: String
+    abstract val description: String
+    abstract val duration: Int
+}
+
 @Serializable
 data class ModelLesson(
     val id: Int,
     val idCourse: Int,
-    val title: String,
-    val description: String,
+    override val title: String,
+    override val description: String,
     val datetime: String,
-    val duration: Int,
+    override val duration: Int,
     val isComplete: Boolean,
     val file: String?,
     val commentFile: String?,
-)
+): LessonBase()
 
 data class LessonBody(
     val idCourse: Int,
     val idUser: Int,
-    val title: String,
-    val description: String,
+    override val title: String,
+    override val description: String,
     val datetime: LocalDateTime,
-    val duration: Int,
+    override val duration: Int,
     val isComplete: Boolean,
     val file: String? = null,
     val commentFile: String? = null,
-)
+): LessonBase()

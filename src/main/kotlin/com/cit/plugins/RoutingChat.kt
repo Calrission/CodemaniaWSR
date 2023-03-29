@@ -6,6 +6,8 @@ import com.cit.models.ModelMessage
 import com.cit.models.ModelSystemMessage
 import com.cit.usersController
 import com.cit.utils.*
+import com.cit.utils.respond.respondAudio
+import com.cit.utils.respond.respondFile
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
@@ -57,6 +59,15 @@ fun Application.configureChat() {
             val user = call.receiveUserByQueryToken() ?: return@get
             val idChat = call.receivePathParameter("idChat")?.toInt() ?: return@get
             call.respondAnswer(chatController.respondChat(user.id, idChat))
+        }
+
+        get("audio/{idMessage}"){
+            val idMessage = call.receivePathParameter("idMessage")?.toInt() ?: return@get
+            val answer = chatController.checkAudioMessage(idMessage)
+            if (answer.isError)
+                call.respondAnswer(answer)
+            else
+                call.respondAudio(answer.answer!!)
         }
     }
 }

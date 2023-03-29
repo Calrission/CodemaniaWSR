@@ -4,8 +4,10 @@ import com.cit.catalogController
 import com.cit.coursesController
 import com.cit.database.tables.ModelCourse
 import com.cit.database.tables.ModelCourseShort
+import com.cit.database.tables.SafeItemPlan
 import com.cit.database.tables.Tag
 import com.cit.models.ModelAnswer
+import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.tagsController
 import io.ktor.http.*
 
@@ -34,8 +36,10 @@ class CatalogController {
     suspend fun respondCourse(idCourse: Int): ModelAnswer<ModelCourse> {
         val course = coursesController.getCourse(idCourse)
         return if (course == null)
-            ModelAnswer.instanceError(HttpStatusCode.NotFound, "Курс не найден")
-        else
+            "Курс не найден".asError(HttpStatusCode.NotFound)
+        else {
+            course.plan = course.plan.map { it as SafeItemPlan }
             ModelAnswer(answer = course)
+        }
     }
 }

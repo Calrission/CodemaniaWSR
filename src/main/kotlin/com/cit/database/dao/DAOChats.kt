@@ -11,7 +11,7 @@ class DAOChats: DAOTable<Chat, Chats, Chat, Chat>() {
         return Chat(
             id = row[Chats.id],
             firstIdUser = row[Chats.firstIdUser],
-            secondIdUser = row[Chats.firstIdUser],
+            secondIdUser = row[Chats.secondIdUser],
         )
     }
 

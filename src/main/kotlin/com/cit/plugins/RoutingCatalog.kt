@@ -24,7 +24,8 @@ fun Application.configureCatalog(){
 
         get("catalog/course"){
             val idCourse = call.receiveQueryParameter("idCourse")?.toInt() ?: return@get
-            call.respondAnswer(catalogController.respondCourse(idCourse))
+            val course = catalogController.respondCourse(idCourse)
+            call.respondAnswer(course)
         }
 
         get("catalog/materials"){

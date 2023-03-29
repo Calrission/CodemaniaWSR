@@ -86,5 +86,11 @@ class LessonsController {
         return prevDate
     }
 
+    suspend fun getLessonsCourseUser(idCourse: Int, idUser: Int): List<Lesson>{
+        return daoLesson.selectMany {
+            (Lessons.idUser eq idUser).and(Lessons.idCourse eq idCourse)
+        }
+    }
+
 
 }

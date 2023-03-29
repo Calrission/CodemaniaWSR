@@ -39,8 +39,8 @@ fun Application.configureProfile(){
 
         get("profile/course"){
             val idCourse = call.receiveQueryParameter("idCourse")?.toInt() ?: return@get
-            val idUser = call.receiveQueryParameter("idUser")?.toInt() ?: return@get
-            call.respondAnswer(profileController.respondProfileCourse(idCourse, idUser))
+            val user = call.receiveUserByQueryToken() ?: return@get
+            call.respondAnswer(profileController.respondProfileCourse(idCourse, user.id))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.cit.database.controllers
 
+import com.cit.chatController
 import com.cit.database.dao.DAOChats
 import com.cit.database.dao.DAOMessages
 import com.cit.database.tables.*
@@ -9,6 +10,7 @@ import com.cit.models.ModelAnswer.Companion.asError
 import io.ktor.http.*
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
+import java.io.File
 
 class ChatController {
 
@@ -42,4 +44,12 @@ class ChatController {
     suspend fun getAllMessagesChat(idChat: Int): List<SafeMessage> {
         return daoMessages.selectMany { Messages.idChat eq idChat }.map { it.toSafe() }
     }
+    suspend fun checkAudioMessage(idMessage: Int): ModelAnswer<String> {
+        val message = chatController.getMessage(idMessage) ?: return "Сообщение не найдено".asError(HttpStatusCode.NotFound)
+        if (!message.isAudio)
+            return "Данное сообщение не аудио".asError()
+        return "$idMessage.mp3".asAnswer()
+
+    }
+    suspend fun getMessage(idMessage: Int): Message? = daoMessages.selectSingle { Messages.id eq idMessage }
 }

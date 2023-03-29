@@ -5,9 +5,9 @@ import com.cit.database.tables.*
 import com.cit.models.ModelAnswer
 import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
-import com.cit.plugins.imageDirectory
 import com.cit.usersController
 import com.cit.utils.DateTimeUtils
+import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
 import com.cit.utils.ValidationUtils.Companion.isValidEmail
 import io.ktor.http.*
 import java.io.File
@@ -20,8 +20,8 @@ class ProfileController {
     }
 
     suspend fun respondProfileCourse(idCourse: Int, idUser: Int): ModelAnswer<ModelCourse> {
-        val course = coursesController.getCourse(idCourse)
-        if (!coursesController.checkBuyCourseUser(idUser, idCourse) || course == null)
+        val course = coursesController.getCourse(idCourse, idUser)
+        if (course == null || !coursesController.checkBuyCourseUser(idUser, idCourse))
             return "Курс пользователя не найден".asError(HttpStatusCode.NotFound)
         return course.asAnswer()
     }
@@ -37,6 +37,7 @@ class ProfileController {
     }
 
     suspend fun uploadAvatarProfile(idUser: Int, format: String, binaryData: ByteArray): ModelAnswer<Boolean>{
+        val imageDirectory = getLocalProperty("images_path")
         val filename = DateTimeUtils.getDateTimeFilename() + ".$format"
         val newFile = File("$imageDirectory/$filename")
         newFile.writeBytes(binaryData)

@@ -1,7 +1,11 @@
 package com.cit.database.tables
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import io.ktor.http.ContentType.*
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
+
 
 object Courses: Table() {
     val id = integer("id").autoIncrement()
@@ -30,7 +34,10 @@ data class Course(
     val plan: String,
     val price: Int
 ){
-    fun toModelCourse(tagsIds: List<Int>, mentors: List<ModelHuman>) = ModelCourse(id, title, description, tagsIds, mentors, cover, plan, price)
+    fun toModelCourse(tagsIds: List<Int>, mentors: List<ModelHuman>, plan: List<LessonBase>) = ModelCourse(
+        id, title, description, tagsIds,
+        mentors, cover, plan, price
+    )
 }
 
 @Serializable
@@ -41,7 +48,7 @@ data class ModelCourse(
     val tags: List<Int>,
     val mentors: List<ModelHuman>,
     val cover: String,
-    val plan: String,
+    var plan: List<LessonBase>,
     val price: Int
 ){
     fun toModelCourseShort() = ModelCourseShort(id, title, tags, cover, price)
@@ -55,3 +62,21 @@ data class ModelCourseShort(
     val cover: String,
     val price: Int
 )
+
+@Serializable
+data class ItemPlan(
+    override val title: String,
+    override val description: String,
+    override val duration: Int,
+    val file: String?,
+    val commentFile: String?
+): LessonBase(){
+    fun toSafe(): SafeItemPlan = SafeItemPlan(title, description, duration)
+}
+
+@Serializable
+data class SafeItemPlan(
+    override val title: String,
+    override val description: String,
+    override val duration: Int,
+): LessonBase()

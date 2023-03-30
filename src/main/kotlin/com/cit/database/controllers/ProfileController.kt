@@ -19,16 +19,18 @@ class ProfileController {
         return coursesUser.asAnswer()
     }
 
-    suspend fun respondProfileCourse(idCourse: Int, idUser: Int): ModelAnswer<ModelCourse> {
-        val course = coursesController.getCourse(idCourse, idUser)
+    suspend fun respondProfileCourse(idCourse: Int, idUser: Int): ModelAnswer<SoldModelCourse> {
+        val course = coursesController.getSoldCourse(idCourse, idUser)
         if (course == null || !coursesController.checkBuyCourseUser(idUser, idCourse))
             return "Курс пользователя не найден".asError(HttpStatusCode.NotFound)
         return course.asAnswer()
     }
 
     suspend fun respondProfileTags(idUser: Int): ModelAnswer<List<Int>> {
-        val tags = coursesController.getUserCourses(idUser).map { it.tags }.reduce { acc, ints -> acc + ints }
-        return tags.asAnswer()
+        val tagsData = coursesController.getUserCourses(idUser).map { it.tags }
+        if (tagsData.isEmpty())
+            return emptyList<Int>().asAnswer()
+        return tagsData.reduce { acc, ints -> acc + ints }.asAnswer()
     }
 
     suspend fun respondProfile(idUser: Int): ModelAnswer<PersonData>{

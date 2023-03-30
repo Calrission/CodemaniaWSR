@@ -4,11 +4,9 @@ import com.cit.catalogController
 import com.cit.materialsController
 import com.cit.models.ModelAnswer
 import com.cit.models.ModelAnswer.Companion.asAnswer
-import com.cit.utils.receiveQueryParameter
-import com.cit.utils.receiveUserByHeaderToken
-import com.cit.utils.receiveUserByQueryToken
-import com.cit.utils.respondAnswer
+import com.cit.utils.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -30,8 +28,13 @@ fun Application.configureCatalog(){
         }
 
         get("catalog/materials"){
-            val result = ModelAnswer(answer = materialsController.getAllMaterials())
-            call.respondAnswer(result)
+            call.respondAnswer(materialsController.getAllMaterials().asAnswer())
+        }
+
+        post("catalog/orderCreate"){
+            val user = call.receiveUserByHeaderToken() ?: return@post
+            val ids = call.receiveTransform<List<Int>>() ?: return@post
+
         }
     }
 }

@@ -36,7 +36,7 @@ class WorkSpaceController {
     }
 
     suspend fun respondLesson(idUser: Int, idLesson: Int): ModelAnswer<ModelLesson>{
-        val lesson = lessonsController.getLesson(idLesson, idUser) ?: return ModelAnswer(HttpStatusCode.NotFound, messageError = "Занятие не найдено")
+        val lesson = lessonsController.getLesson(idLesson, idUser) ?: return "Занятие не найдено".asError(HttpStatusCode.NotFound)
         return lesson.toModelLesson().asAnswer()
     }
 

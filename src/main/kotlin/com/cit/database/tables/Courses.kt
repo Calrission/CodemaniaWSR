@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.ktor.http.ContentType.*
 import kotlinx.serialization.Serializable
+import org.h2.table.PlanItem
 import org.jetbrains.exposed.sql.Table
 
 
@@ -34,7 +35,12 @@ data class Course(
     val plan: String,
     val price: Int
 ){
-    fun toModelCourse(tagsIds: List<Int>, mentors: List<ModelHuman>, plan: List<LessonBase>) = ModelCourse(
+    fun toModelCourse(tagsIds: List<Int>, mentors: List<ModelHuman>, plan: List<SafeItemPlan>) = ModelCourse(
+        id, title, description, tagsIds,
+        mentors, cover, plan, price
+    )
+
+    fun toSoldModelCourse(tagsIds: List<Int>, mentors: List<ModelHuman>, plan: List<ModelLesson>) = SoldModelCourse(
         id, title, description, tagsIds,
         mentors, cover, plan, price
     )
@@ -48,7 +54,21 @@ data class ModelCourse(
     val tags: List<Int>,
     val mentors: List<ModelHuman>,
     val cover: String,
-    var plan: List<LessonBase>,
+    var plan: List<SafeItemPlan>,
+    val price: Int
+){
+    fun toModelCourseShort() = ModelCourseShort(id, title, tags, cover, price)
+}
+
+@Serializable
+data class SoldModelCourse(
+    val id: Int,
+    val title: String,
+    val description: String,
+    val tags: List<Int>,
+    val mentors: List<ModelHuman>,
+    val cover: String,
+    var plan: List<ModelLesson>,
     val price: Int
 ){
     fun toModelCourseShort() = ModelCourseShort(id, title, tags, cover, price)
@@ -65,18 +85,18 @@ data class ModelCourseShort(
 
 @Serializable
 data class ItemPlan(
-    override val title: String,
-    override val description: String,
-    override val duration: Int,
+    val title: String,
+    val description: String,
+    val duration: Int,
     val file: String?,
     val commentFile: String?
-): LessonBase(){
+){
     fun toSafe(): SafeItemPlan = SafeItemPlan(title, description, duration)
 }
 
 @Serializable
 data class SafeItemPlan(
-    override val title: String,
-    override val description: String,
-    override val duration: Int,
-): LessonBase()
+    val title: String,
+    val description: String,
+    val duration: Int,
+)

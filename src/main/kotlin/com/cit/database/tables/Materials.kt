@@ -1,5 +1,6 @@
 package com.cit.database.tables
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
 object Materials: Table() {
@@ -16,7 +17,7 @@ data class MaterialBody(
     val cover: String,
     val url: String
 )
-
+@Serializable
 data class Material(
     val id: Int,
     val title: String,

@@ -3,6 +3,7 @@ package com.cit.utils
 import com.cit.database.tables.User
 import com.cit.interfaces.Validation
 import com.cit.models.ModelAnswer
+import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.models.ModelError
 import com.cit.usersController
 import io.ktor.http.*
@@ -14,16 +15,17 @@ suspend fun ApplicationCall.respondError(code: HttpStatusCode = HttpStatusCode.B
     respond(code, ModelError(error))
 }
 
-suspend inline fun <reified T> ApplicationCall.responseErrorValidationFields(){
+suspend inline fun <reified T> ApplicationCall.respondErrorFields(){
     val fields = T::class.java.declaredFields.toList().map { it.name }.filter { it != "Companion" }
-    respondError(error = "Bad body, please check: ${fields.joinToString(separator = ", "){ it }}")
+    val fieldsText = fields.joinToString(separator = ", "){ it }
+    respondAnswer("Bad body, please check${if (fieldsText.isNotEmpty()) ": $fields" else ""}".asError<Unit>())
 }
 
 suspend inline fun <reified T : Any> ApplicationCall.receiveTransform(): T?{
     try {
         return receive()
     } catch (e: Exception) {
-        responseErrorValidationFields<T>()
+        respondErrorFields<T>()
     }
     return null
 }

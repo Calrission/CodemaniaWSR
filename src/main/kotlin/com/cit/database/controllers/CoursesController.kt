@@ -8,6 +8,7 @@ import com.cit.tagsController
 import com.cit.usersController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.h2.table.PlanItem
 import org.jetbrains.exposed.sql.and
 
 class CoursesController {
@@ -19,17 +20,22 @@ class CoursesController {
     suspend fun getUserCourses(idUser: Int): List<ModelCourse> =
         daoSoldCourse.selectMany { SoldCourses.idUser eq idUser }.mapNotNull { getCourse(it.idCourse) }
 
-    suspend fun getCourse(idCourse: Int, idUser: Int? = null): ModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toModelCourse(idUser)
+    suspend fun getCourse(idCourse: Int): ModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toModelCourse()
 
-    private suspend fun Course.toModelCourse(idUser: Int? = null): ModelCourse{
+    suspend fun getSoldCourse(idCourse: Int, idUser: Int): SoldModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toSoldModelCourse(idUser)
+
+    private suspend fun Course.toModelCourse(): ModelCourse{
         val tags = tagsController.getTagsCourse(id).map { it.id }
         val mentors = usersController.getMentorsCourse(id)
-        val plan: List<LessonBase> = if (idUser == null){
-            Gson().fromJson<List<ItemPlan>?>(plan, object: TypeToken<List<ItemPlan>>() {}.type).map { it.toSafe() }
-        }else{
-            lessonsController.getLessonsCourseUser(id, idUser)
-        }
+        val plan: List<SafeItemPlan> = Gson().fromJson<List<ItemPlan>?>(plan, object: TypeToken<List<ItemPlan>>() {}.type).map { it.toSafe() }
         return toModelCourse(tags, mentors, plan)
+    }
+
+    private suspend fun Course.toSoldModelCourse(idUser: Int): SoldModelCourse{
+        val tags = tagsController.getTagsCourse(id).map { it.id }
+        val mentors = usersController.getMentorsCourse(id)
+        val plan: List<ModelLesson> = lessonsController.getLessonsCourseUser(id, idUser).map { it.toModelLesson() }
+        return toSoldModelCourse(tags, mentors, plan)
     }
 
     suspend fun checkBuyCourseUser(idUser: Int, idCourse: Int): Boolean{

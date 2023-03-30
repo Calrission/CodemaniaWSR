@@ -9,6 +9,7 @@ import com.cit.usersController
 import com.cit.utils.DateTimeUtils
 import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
 import com.cit.utils.ValidationUtils.Companion.isValidEmail
+import com.cit.utils.respond.uploadFile
 import io.ktor.http.*
 import java.io.File
 import java.time.LocalDate
@@ -39,10 +40,8 @@ class ProfileController {
     }
 
     suspend fun uploadAvatarProfile(idUser: Int, format: String, binaryData: ByteArray): ModelAnswer<Boolean>{
-        val imageDirectory = getLocalProperty("images_path")
         val filename = DateTimeUtils.getDateTimeFilename() + ".$format"
-        val newFile = File("$imageDirectory/$filename")
-        newFile.writeBytes(binaryData)
+        val newFile = uploadFile(filename, binaryData)
         val result = usersController.updateAvatar(filename, idUser) && newFile.exists()
         return if (result) true.asAnswer() else "Ошибка при сохранении, попробуйте позже".asError(HttpStatusCode.Conflict)
     }

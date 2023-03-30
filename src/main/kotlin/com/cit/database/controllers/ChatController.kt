@@ -7,10 +7,12 @@ import com.cit.database.tables.*
 import com.cit.models.ModelAnswer
 import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
+import com.cit.utils.LocalPropertiesUtils
 import io.ktor.http.*
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 import java.io.File
+import java.time.LocalDateTime
 
 class ChatController {
 
@@ -44,12 +46,30 @@ class ChatController {
     suspend fun getAllMessagesChat(idChat: Int): List<SafeMessage> {
         return daoMessages.selectMany { Messages.idChat eq idChat }.map { it.toSafe() }
     }
-    suspend fun checkAudioMessage(idMessage: Int): ModelAnswer<String> {
+    suspend fun respondGetAudioFromMessage(idMessage: Int): ModelAnswer<String> {
         val message = chatController.getMessage(idMessage) ?: return "Сообщение не найдено".asError(HttpStatusCode.NotFound)
         if (!message.isAudio)
             return "Данное сообщение не аудио".asError()
         return "$idMessage.mp3".asAnswer()
-
     }
+
     suspend fun getMessage(idMessage: Int): Message? = daoMessages.selectSingle { Messages.id eq idMessage }
+
+    suspend fun newMessage(message: String, idChat: Int, idUser: Int, dateTime: LocalDateTime, isAudio: Boolean): Message? {
+        val model = InsertMessage(message, isAudio, idUser, idChat, dateTime)
+        return daoMessages.insert(model)
+    }
+
+    suspend fun checkAccessUserToMessage(idUser: Int, idMessage: Int): Boolean {
+        return daoMessages.selectSingle { (Messages.idUser eq idUser).and(Messages.id eq idMessage) } != null
+    }
+
+    suspend fun checkExistMessage(idMessage: Int): Boolean = daoMessages.selectSingle { Messages.id eq idMessage } != null
+
+    suspend fun checkIsAudioMessage(idMessage: Int): Boolean = daoMessages.selectSingle { (Messages.id eq idMessage).and(Messages.isAudio eq true) } != null
+
+    fun checkExistAudioFileForAudioMessage(idMessage: Int): Boolean{
+        val file = File(LocalPropertiesUtils.getLocalProperty("audio_path") + "/" + idMessage + ".mp3")
+        return file.exists()
+    }
 }

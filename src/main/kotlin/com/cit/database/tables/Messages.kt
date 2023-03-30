@@ -1,6 +1,8 @@
 package com.cit.database.tables
 
+import com.cit.models.MessageChat
 import com.cit.utils.DateTimeUtils
+import com.cit.utils.DateTimeUtils.Companion.dateTimeFormatter
 import com.cit.utils.DateTimeUtils.Companion.parseDateTime
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
@@ -34,6 +36,11 @@ data class Message(
     fun toSafe(): SafeMessage = SafeMessage(
         id, idChat, text, datetime.format(DateTimeUtils.dateTimeFormatter), idUser, isAudio
     )
+
+    fun toMessageChat(): MessageChat = MessageChat(
+        id, text, idUser,
+        datetime = datetime.format(dateTimeFormatter),
+        isAudio = isAudio)
 }
 @Serializable
 data class SafeMessage(
@@ -72,4 +79,8 @@ data class ModelMessage(
     val datetime: String,
     val user: ModelHuman,
     val isAudio: Boolean
-)
+){
+    fun toInsertMessage(): InsertMessage = InsertMessage(
+        text, isAudio, user.id, idChat, datetime.parseDateTime() ?: LocalDateTime.now()
+    )
+}

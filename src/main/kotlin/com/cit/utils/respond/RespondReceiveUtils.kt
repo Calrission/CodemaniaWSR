@@ -86,10 +86,10 @@ suspend inline fun ApplicationCall.receivePathParameter(parameter: String): Stri
     return value
 }
 
-suspend inline fun ApplicationCall.receiveHeaderParameter(header: String): String? {
-    val value = request.headers["filename"]
-    if (value == null){
-        respondError(error = "Check header: filename")
+suspend inline fun ApplicationCall.receiveHeaderParameter(header: String, respondError: Boolean = true): String? {
+    val value = request.headers[header]
+    if (value == null && respondError){
+        respondError(error = "Check header: $header")
         return null
     }
     return value
@@ -98,8 +98,18 @@ suspend inline fun ApplicationCall.receiveHeaderParameter(header: String): Strin
 suspend inline fun ApplicationCall.receiveUserByQueryToken(respondError: Boolean = true): User? {
     val token = receiveQueryToken(respondError) ?: return null
     val user = usersController.getUserByToken(token)
-    if (user == null){
-        if (respondError) respondError(error="token not valid")
+    if (user == null && respondError){
+        respondError(error="token not valid")
+        return null
+    }
+    return user
+}
+
+suspend inline fun ApplicationCall.receiveUserByHeaderToken(respondError: Boolean = true): User? {
+    val token = receiveHeaderParameter("Authorization", respondError)?.substringAfter("Bearer ") ?: return null
+    val user = usersController.getUserByToken(token)
+    if (user == null && respondError){
+        respondError(error="token not valid")
         return null
     }
     return user

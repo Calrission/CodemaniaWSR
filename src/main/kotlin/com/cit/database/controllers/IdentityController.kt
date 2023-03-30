@@ -9,6 +9,7 @@ import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.models.bodies.SignInBody
 import com.cit.models.bodies.SignUpBody
 import io.ktor.http.*
+import org.jetbrains.exposed.sql.and
 import java.util.UUID
 
 class IdentityController {
@@ -54,5 +55,9 @@ class IdentityController {
                 Tokens.idUser eq userId
             }?.token
         }
+    }
+
+    suspend fun respondCheckValidToken(token: String, idUser: Int): ModelAnswer<Boolean>{
+        return (daoToken.selectSingle { (Tokens.idUser eq idUser).and(Tokens.token eq token) } != null).asAnswer()
     }
 }

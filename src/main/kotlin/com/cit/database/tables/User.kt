@@ -87,6 +87,10 @@ data class User(
         id, email, firstname, lastname, patronymic, avatar,
         sex.isSex()!!.valueStr, dateBirthDay.format(DateTimeUtils.dateFormatter)
     )
+
+    fun toIdentityResponse(token: String): IdentityResponse = IdentityResponse(
+        toModelHuman(), token
+    )
 }
 
 @Serializable

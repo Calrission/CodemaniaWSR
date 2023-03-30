@@ -51,12 +51,12 @@ fun Application.configureChat() {
         }
 
         get("chats"){
-            val user = call.receiveUserByQueryToken() ?: return@get
+            val user = call.receiveUserByHeaderToken() ?: return@get
             call.respondAnswer(chatController.respondUserChats(user.id))
         }
 
         get("chat"){
-            val user = call.receiveUserByQueryToken() ?: return@get
+            val user = call.receiveUserByHeaderToken() ?: return@get
             val idChat = call.receivePathParameter("idChat")?.toInt() ?: return@get
             call.respondAnswer(chatController.respondChat(user.id, idChat))
         }

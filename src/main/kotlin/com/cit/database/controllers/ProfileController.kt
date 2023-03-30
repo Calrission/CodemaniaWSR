@@ -46,11 +46,12 @@ class ProfileController {
     }
 
     suspend fun respondPatchProfile(idUser: Int, pathBody: PatchUserBody): ModelAnswer<PersonData>{
-        if (pathBody.email != null)
+        if (pathBody.email != null) {
             if (usersController.checkExistEmail(pathBody.email))
                 return "Такая почта уже используется".asError()
-            if (!pathBody.email!!.isValidEmail())
+            if (!pathBody.email.isValidEmail())
                 return "Почта не корректна".asError()
+        }
         if (pathBody.dateBirthDay != null && pathBody.dateBirthDay.isAfter(LocalDate.now())){
             return "День рождение не может быть в будущем".asError()
         }

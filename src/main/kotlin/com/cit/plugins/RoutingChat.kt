@@ -26,7 +26,6 @@ fun Application.configureChat() {
         val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
         webSocket("/chat"){
             val token = call.request.queryParameters["token"] ?: return@webSocket
-            val idChat = call.request.queryParameters["idChat"]?.toInt() ?: return@webSocket
             val user = usersController.getUserByToken(token)?: return@webSocket
             val connection = Connection(this, user)
             connections += connection
@@ -40,7 +39,10 @@ fun Application.configureChat() {
                     val receivedText: String = frame.readText()
                     val text = receivedText.replace("\r\n", "")
                     val inComingMessage = Gson().fromJson(text, InComingMessage::class.java)
-                    val message = chatController.newMessage(inComingMessage.text ?: "", idChat, connection.user.id, LocalDateTime.now(), inComingMessage.isAudio)
+                    val message = if (inComingMessage.idChat == null || (!inComingMessage.isAudio && inComingMessage.text.isNullOrBlank()))
+                        null
+                    else
+                        chatController.newMessage(inComingMessage.text ?: "", inComingMessage.idChat, connection.user.id, LocalDateTime.now(), inComingMessage.isAudio)
                     if (message == null) {
                         connection.session.sendSerialized("Сообщение не отправленно".isModelErrorSystemMessage())
                         continue

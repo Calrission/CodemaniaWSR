@@ -21,7 +21,7 @@ data class ModelHuman(
 
 @Serializable
 data class IdentityResponse(
-    val user: ModelHuman,
+    val user: PersonData,
     val token: String
 )
 
@@ -89,7 +89,7 @@ data class User(
     )
 
     fun toIdentityResponse(token: String): IdentityResponse = IdentityResponse(
-        toModelHuman(), token
+        toPersonData(), token
     )
 }
 

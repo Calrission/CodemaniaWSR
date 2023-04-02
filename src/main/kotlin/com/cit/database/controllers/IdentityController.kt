@@ -38,7 +38,7 @@ class IdentityController {
         val token = setNewTokenUser(user.id)
             ?: return "Токен не создан, попробуйте еще раз !".asError(HttpStatusCode.NotFound)
 
-        return IdentityResponse(user.toModelHuman(), token).asAnswer()
+        return IdentityResponse(user.toPersonData(), token).asAnswer()
     }
 
     suspend fun signOut(idUser: Int): ModelAnswer<Boolean>{

@@ -6,6 +6,7 @@ import io.ktor.http.ContentType.*
 import kotlinx.serialization.Serializable
 import org.h2.table.PlanItem
 import org.jetbrains.exposed.sql.Table
+import java.time.LocalDateTime
 
 
 object Courses: Table() {
@@ -44,6 +45,8 @@ data class Course(
         id, title, description, tagsIds,
         mentors, cover, plan, price
     )
+
+    fun parsePlan(): List<ItemPlan> = Gson().fromJson(plan, object: TypeToken<List<ItemPlan>>() {}.type)
 }
 
 @Serializable
@@ -92,6 +95,10 @@ data class ItemPlan(
     val commentFile: String?
 ){
     fun toSafe(): SafeItemPlan = SafeItemPlan(title, description, duration)
+
+    fun toLessonBody(idCourse: Int, idUser: Int, dateTime: LocalDateTime, isComplete: Boolean = false): LessonBody = LessonBody(
+        idCourse, idUser, title, description, dateTime, duration, isComplete, file, commentFile
+    )
 }
 
 @Serializable

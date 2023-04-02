@@ -2,6 +2,7 @@ package com.cit.database.controllers
 
 import com.cit.database.dao.DAOLessons
 import com.cit.database.tables.Lesson
+import com.cit.database.tables.LessonBody
 import com.cit.database.tables.Lessons
 import org.jetbrains.exposed.sql.and
 import java.time.LocalDate
@@ -92,5 +93,7 @@ class LessonsController {
         }
     }
 
-
+    suspend fun insertNewLessons(bodies: List<LessonBody>): List<Boolean> {
+        return bodies.map { daoLesson.insert(it) != null }
+    }
 }

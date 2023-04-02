@@ -9,6 +9,7 @@ import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.utils.LocalPropertiesUtils
 import io.ktor.http.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 import java.io.File
@@ -71,5 +72,12 @@ class ChatController {
     fun checkExistAudioFileForAudioMessage(idMessage: Int): Boolean{
         val file = File(LocalPropertiesUtils.getLocalProperty("audio_path") + "/" + idMessage + ".mp3")
         return file.exists()
+    }
+
+    suspend fun createNewChat(idUser: Int, idMentor: Int): Chat? {
+        if (!daoChats.checkExistChat(idUser, idMentor)){
+            return daoChats.insert(InsertChat(idUser, idMentor))
+        }
+        return daoChats.getChat(idUser, idMentor)
     }
 }

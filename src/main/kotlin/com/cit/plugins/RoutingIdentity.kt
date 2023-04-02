@@ -6,6 +6,7 @@ import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.models.bodies.SignInBody
 import com.cit.models.bodies.SignUpBody
 import com.cit.usersController
+import com.cit.utils.receiveQueryParameter
 import com.cit.utils.receiveUserByHeaderToken
 import com.cit.utils.receiveValidation
 import com.cit.utils.respondAnswer
@@ -45,6 +46,12 @@ fun Application.configureIdentityRouting(){
         get("checkToken"){
             val user = call.receiveUserByHeaderToken()
             call.respondAnswer((user != null).asAnswer())
+        }
+
+        post("changePassword"){
+            val user = call.receiveUserByHeaderToken() ?: return@post
+            val newPassword = call.receiveQueryParameter("newPassword") ?: return@post
+            call.respondAnswer(identityController.respondChangePassword(user.id, newPassword))
         }
     }
 }

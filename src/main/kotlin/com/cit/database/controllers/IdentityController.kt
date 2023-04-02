@@ -57,6 +57,10 @@ class IdentityController {
         }
     }
 
+    suspend fun respondChangePassword(idUser: Int, newPassword: String): ModelAnswer<Boolean>{
+        return daoUser.updatePassword(idUser, newPassword).asAnswer()
+    }
+
     suspend fun respondCheckValidToken(token: String, idUser: Int): ModelAnswer<Boolean>{
         return (daoToken.selectSingle { (Tokens.idUser eq idUser).and(Tokens.token eq token) } != null).asAnswer()
     }

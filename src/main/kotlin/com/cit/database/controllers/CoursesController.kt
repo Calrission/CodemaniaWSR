@@ -8,7 +8,6 @@ import com.cit.tagsController
 import com.cit.usersController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.h2.table.PlanItem
 import org.jetbrains.exposed.sql.and
 
 class CoursesController {
@@ -18,16 +17,18 @@ class CoursesController {
     suspend fun getAllCourses(): List<ModelCourse> = daoCourses.selectAll().map { it.toModelCourse() }
 
     suspend fun getUserCourses(idUser: Int): List<ModelCourse> =
-        daoSoldCourse.selectMany { SoldCourses.idUser eq idUser }.mapNotNull { getCourse(it.idCourse) }
+        daoSoldCourse.selectMany { SoldCourses.idUser eq idUser }.mapNotNull { getModelCourse(it.idCourse) }
 
-    suspend fun getCourse(idCourse: Int): ModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toModelCourse()
+    suspend fun getModelCourse(idCourse: Int): ModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toModelCourse()
+
+    suspend fun getCourse(idCourse: Int): Course? = daoCourses.selectSingle { Courses.id eq idCourse }
 
     suspend fun getSoldCourse(idCourse: Int, idUser: Int): SoldModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toSoldModelCourse(idUser)
 
     private suspend fun Course.toModelCourse(): ModelCourse{
         val tags = tagsController.getTagsCourse(id).map { it.id }
         val mentors = usersController.getMentorsCourse(id)
-        val plan: List<SafeItemPlan> = Gson().fromJson<List<ItemPlan>?>(plan, object: TypeToken<List<ItemPlan>>() {}.type).map { it.toSafe() }
+        val plan: List<SafeItemPlan> = parsePlan().map { it.toSafe() }
         return toModelCourse(tags, mentors, plan)
     }
 

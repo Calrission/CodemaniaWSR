@@ -34,7 +34,7 @@ fun Application.configureCatalog(){
         post("catalog/orderCreate"){
             val user = call.receiveUserByHeaderToken() ?: return@post
             val ids = call.receiveTransform<List<Int>>() ?: return@post
-
+            call.respondAnswer(catalogController.respondNewOrder(user.id, ids))
         }
     }
 }

@@ -25,6 +25,11 @@ data class Chat(
     }
 }
 
+data class InsertChat(
+    val firstIdUser: Int,
+    val secondIdUser: Int
+)
+
 @Serializable
 data class ModelChat(
     val id: Int,

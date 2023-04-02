@@ -101,4 +101,14 @@ class DAOUser: DAOTable<User, Users, InsertUserBody, PatchUserBody>() {
             }
         } > 0
     }
+
+    suspend fun updatePassword(idUser: Int, newPassword: String): Boolean{
+        return pushQuery {
+            Users.update({
+                Users.id eq idUser
+            }){
+                it[Users.password] = newPassword
+            }
+        } > 0
+    }
 }

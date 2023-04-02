@@ -38,7 +38,7 @@ data class Message(
     )
 
     fun toMessageChat(): MessageChat = MessageChat(
-        id, text, idUser,
+        id, text, idChat, idUser,
         datetime = datetime.format(dateTimeFormatter),
         isAudio = isAudio)
 }

@@ -15,7 +15,7 @@ fun Application.configureProfile(){
         }
 
         patch("profile"){
-            val user = call.receiveUserByHeaderToken() ?: return@patch
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@patch
             val body = call.receive<ReceivePatchUserBody>().toPatchUserBody()
             call.respondAnswer(profileController.respondPatchProfile(user.id, body))
         }
@@ -31,7 +31,7 @@ fun Application.configureProfile(){
         }
 
         post("profile/avatar"){
-            val idUser = call.receiveUserByHeaderToken()?.id ?: return@post
+            val idUser = call.receiveUserByHeaderTokenOrIdUser()?.id ?: return@post
             val format = call.receiveQueryParameter("format") ?: return@post
             val binaryData = call.receiveByteArray() ?: return@post
             call.respondAnswer(profileController.uploadAvatarProfile(idUser, format, binaryData))
@@ -39,7 +39,7 @@ fun Application.configureProfile(){
 
         get("profile/course"){
             val idCourse = call.receiveQueryParameter("idCourse")?.toInt() ?: return@get
-            val user = call.receiveUserByHeaderToken() ?: return@get
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@get
             call.respondAnswer(profileController.respondProfileCourse(idCourse, user.id))
         }
     }

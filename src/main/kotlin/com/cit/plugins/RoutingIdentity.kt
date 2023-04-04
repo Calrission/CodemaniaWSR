@@ -5,9 +5,8 @@ import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.models.bodies.SignInBody
 import com.cit.models.bodies.SignUpBody
-import com.cit.usersController
 import com.cit.utils.receiveQueryParameter
-import com.cit.utils.receiveUserByHeaderToken
+import com.cit.utils.receiveUserByHeaderTokenOrIdUser
 import com.cit.utils.receiveValidation
 import com.cit.utils.respondAnswer
 import io.ktor.server.application.*
@@ -17,7 +16,7 @@ fun Application.configureIdentityRouting(){
 
     routing {
         post("signIn") {
-            val user = call.receiveUserByHeaderToken(respondError = false)
+            val user = call.receiveUserByHeaderTokenOrIdUser(respondError = false)
             if (user != null) {
                 // Обновление токена
                 val newToken = identityController.setNewTokenUser(user.id)
@@ -39,17 +38,17 @@ fun Application.configureIdentityRouting(){
         }
 
         post("signOut"){
-            val user = call.receiveUserByHeaderToken() ?: return@post
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@post
             call.respondAnswer(identityController.signOut(user.id))
         }
 
         get("checkToken"){
-            val user = call.receiveUserByHeaderToken()
+            val user = call.receiveUserByHeaderTokenOrIdUser()
             call.respondAnswer((user != null).asAnswer())
         }
 
         post("changePassword"){
-            val user = call.receiveUserByHeaderToken() ?: return@post
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@post
             val newPassword = call.receiveQueryParameter("newPassword") ?: return@post
             call.respondAnswer(identityController.respondChangePassword(user.id, newPassword))
         }

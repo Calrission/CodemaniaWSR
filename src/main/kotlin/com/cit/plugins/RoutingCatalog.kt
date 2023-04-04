@@ -2,12 +2,9 @@ package com.cit.plugins
 
 import com.cit.catalogController
 import com.cit.materialsController
-import com.cit.models.ModelAnswer
 import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.utils.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureCatalog(){
@@ -17,7 +14,7 @@ fun Application.configureCatalog(){
         }
 
         get("catalog/courses"){
-            val idUser = call.receiveUserByHeaderToken(respondError = false)?.id
+            val idUser = call.receiveUserByHeaderTokenOrIdUser(respondError = false)?.id
             call.respondAnswer(catalogController.respondCatalogCourses(idUser))
         }
 
@@ -32,7 +29,7 @@ fun Application.configureCatalog(){
         }
 
         post("catalog/orderCreate"){
-            val user = call.receiveUserByHeaderToken() ?: return@post
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@post
             val ids = call.receiveTransform<List<Int>>() ?: return@post
             call.respondAnswer(catalogController.respondNewOrder(user.id, ids))
         }

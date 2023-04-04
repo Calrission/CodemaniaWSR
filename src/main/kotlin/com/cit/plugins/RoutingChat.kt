@@ -65,12 +65,12 @@ fun Application.configureChat() {
         }
 
         get("chats"){
-            val user = call.receiveUserByHeaderToken() ?: return@get
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@get
             call.respondAnswer(chatController.respondUserChats(user.id))
         }
 
         get("chat"){
-            val user = call.receiveUserByHeaderToken() ?: return@get
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@get
             val idChat = call.receivePathParameter("idChat")?.toInt() ?: return@get
             call.respondAnswer(chatController.respondChat(user.id, idChat))
         }
@@ -85,7 +85,7 @@ fun Application.configureChat() {
         }
 
         post("audio/{idMessage}"){
-            val user = call.receiveUserByHeaderToken() ?: return@post
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@post
             val idMessage = call.receivePathParameter("idMessage")?.toInt() ?: return@post
             val bytes = call.receiveByteArray() ?: return@post
 

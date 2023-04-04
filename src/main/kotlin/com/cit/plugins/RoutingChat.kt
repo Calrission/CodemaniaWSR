@@ -18,6 +18,7 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import org.h2.store.fs.FileUtils
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
@@ -37,7 +38,7 @@ fun Application.configureChat() {
                 for (frame in incoming) {
                     frame as? Frame.Text ?: continue
                     val receivedText: String = frame.readText()
-                    if (receivedText == "/chats" || "/chat" in receivedText){
+                    if (receivedText == "/chats" || "/chat" in receivedText || "/audio" in receivedText){
                         if (receivedText == "/chats") {
                             val answer = chatController.respondUserChats(connection.user.id)
                             if (answer.isError) {
@@ -45,7 +46,7 @@ fun Application.configureChat() {
                             } else {
                                 connection.session.sendSerialized(answer.answer)
                             }
-                        }else{
+                        }else if ("/chat" in receivedText){
                             val idChat = try {
                                 receivedText.substringAfter("/chat ").toInt()
                             }catch (e: Exception){
@@ -58,6 +59,18 @@ fun Application.configureChat() {
                             } else {
                                 connection.session.sendSerialized(answer.answer)
                             }
+                        }else{
+                            val idMessage = try {
+                                receivedText.substringAfter("/audio ").toInt()
+                            }catch (e: Exception){
+                                connection.session.send("Не указан idMessage. Пример: '/audio 47'")
+                                null
+                            } ?: continue
+                            val answer = chatController.respondGetAudioFromMessage(idMessage)
+                            if (answer.isError)
+                                connection.session.send(answer.messageError)
+                            else
+                                connection.session.send(getBytesAudio(answer.answer!!).contentToString())
                         }
                         continue
                     }

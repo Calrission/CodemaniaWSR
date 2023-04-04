@@ -21,11 +21,22 @@ suspend inline fun <reified T> ApplicationCall.respondErrorFields(){
     respondAnswer("Bad body, please check${if (fieldsText.isNotEmpty()) ": $fields" else ""}".asError<Unit>())
 }
 
-suspend inline fun <reified T : Any> ApplicationCall.receiveTransform(): T?{
+suspend inline fun <reified T : Any> ApplicationCall.receiveTransform(respondError: Boolean = true): T?{
     try {
         return receive()
     } catch (e: Exception) {
-        respondErrorFields<T>()
+        if (respondError)
+            respondErrorFields<T>()
+    }
+    return null
+}
+
+suspend inline fun <reified T : Any> ApplicationCall.receiveTransformPrimitive(respondError: Boolean = true): T?{
+    try {
+        return receive()
+    } catch (e: Exception) {
+        if (respondError)
+            respondError(error = "Please check body, it should be ${T::class.java.name}")
     }
     return null
 }
@@ -148,7 +159,7 @@ suspend inline fun <reified T> ApplicationCall.respondAnswer(modelAnswer: ModelA
 }
 
 suspend inline fun <reified T : Validation> ApplicationCall.receiveValidation(): T?{
-    val obj = receiveTransform<T>() ?: return null
+    val obj = receiveTransform<T>(true) ?: return null
     val resultValidation = obj.validate()
     if (resultValidation.success){
         return obj

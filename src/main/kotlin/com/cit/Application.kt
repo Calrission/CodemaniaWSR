@@ -8,6 +8,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.cit.plugins.*
 import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
+import com.cit.utils.WebSocketChatController
 import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -26,6 +27,7 @@ val workSpaceController = WorkSpaceController()
 val lessonsController = LessonsController()
 val profileController = ProfileController()
 val chatController = ChatController()
+val webSocketChatController = WebSocketChatController()
 
 fun main(args: Array<String>) {
 

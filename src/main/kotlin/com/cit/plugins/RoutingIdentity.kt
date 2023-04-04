@@ -16,20 +16,8 @@ fun Application.configureIdentityRouting(){
 
     routing {
         post("signIn") {
-            val user = call.receiveUserByHeaderTokenOrIdUser(respondError = false)
-            if (user != null) {
-                // Обновление токена
-                val newToken = identityController.setNewTokenUser(user.id)
-                if (newToken == null) {
-                    call.respondAnswer("Токен не обновлен".asError<Unit>())
-                }else{
-                    call.respondAnswer(user.toIdentityResponse(newToken).asAnswer())
-                }
-            }else{
-                // Авторизация
-                val body = call.receiveValidation<SignInBody>() ?: return@post
-                call.respondAnswer(identityController.signIn(body))
-            }
+            val body = call.receiveValidation<SignInBody>() ?: return@post
+            call.respondAnswer(identityController.signIn(body))
         }
 
         post("signUp"){

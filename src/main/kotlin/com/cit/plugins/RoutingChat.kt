@@ -8,6 +8,7 @@ import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.models.ModelSystemMessage.Companion.isModelErrorSystemMessage
 import com.cit.models.ModelSystemMessage.Companion.isModelSystemMessage
+import com.cit.profileController
 import com.cit.usersController
 import com.cit.utils.*
 import com.cit.utils.respond.respondAudio
@@ -32,9 +33,7 @@ fun Application.configureChat() {
             val connection = webSocketChatController.newConnectionUser(this, user)
 
             try {
-                webSocketChatController.sendSystemMessage(
-                    "Новый участник чата: ${connection.user.getFIO()}! Онлайн: ${webSocketChatController.getCountOnline()}"
-                )
+                connection.session.sendSerialized(user.toPersonData())
                 for (frame in incoming) {
                     frame as? Frame.Text ?: continue
                     val receivedText: String = frame.readText()
@@ -90,9 +89,6 @@ fun Application.configureChat() {
                 println(e.localizedMessage)
             }finally {
                 webSocketChatController.removeConnection(connection)
-                webSocketChatController.sendSystemMessage(
-                    "Участник ${user.getFIO()} покинул нас! Онлайн: ${webSocketChatController.getCountOnline()}"
-                )
             }
 
         }

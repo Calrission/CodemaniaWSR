@@ -34,9 +34,12 @@ class IdentityController {
         return respondIdentity(newUser)
     }
 
-    suspend fun respondIdentity(user: User): ModelAnswer<IdentityResponse>{
-        val token = setNewTokenUser(user.id)
-            ?: return "Токен не создан, попробуйте еще раз !".asError(HttpStatusCode.NotFound)
+    private suspend fun respondIdentity(user: User): ModelAnswer<IdentityResponse>{
+        var token = daoToken.selectSingle { Tokens.idUser eq user.id }?.token
+        if (token == null){
+            token = setNewTokenUser(user.id)
+                ?: return "Токен не создан, попробуйте еще раз !".asError(HttpStatusCode.NotFound)
+        }
 
         return IdentityResponse(user.toPersonData(), token).asAnswer()
     }

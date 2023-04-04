@@ -20,3 +20,12 @@ fun removeImage(imageName: String): Boolean{
 fun removeFile(filePath: String): Boolean{
     return File(filePath).delete()
 }
+
+fun checkExistImage(imageName: String): Boolean{
+    val imagePath = LocalPropertiesUtils.getLocalProperty("images_path") + "/$imageName"
+    return checkExistFile(imagePath)
+}
+
+fun checkExistFile(filePath: String): Boolean{
+    return File(filePath).exists()
+}

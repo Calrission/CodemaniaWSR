@@ -4,6 +4,7 @@ import com.cit.database.dao.DAOCourseMentors
 import com.cit.database.dao.DAOToken
 import com.cit.database.dao.DAOUser
 import com.cit.database.tables.*
+import com.cit.utils.checkExistImage
 import com.cit.utils.removeImage
 
 class UsersController {
@@ -29,7 +30,7 @@ class UsersController {
         val oldAvatar = (daoUser.selectSingle { Users.id eq idUser } ?: return false).avatar
         val resultUpdate = daoUser.updateAvatar(avatarName, idUser)
         return if (resultUpdate) {
-            oldAvatar != null && removeImage(oldAvatar)
+            oldAvatar != null && (!checkExistImage(oldAvatar) || removeImage(oldAvatar))
         }else{
             false
         }

@@ -8,6 +8,8 @@ data class ModelAnswer <T>(
     val isError: Boolean = false,
     val messageError: String = ""
 ){
+
+    fun <R> changeBody(body: R? = null): ModelAnswer<R> = ModelAnswer(httpStatusCode, body, isError, messageError)
     companion object {
         fun <T> instanceError(
             httpStatusCode: HttpStatusCode = HttpStatusCode.BadRequest,
@@ -21,6 +23,5 @@ data class ModelAnswer <T>(
         fun <T> String.asError(httpStatusCode: HttpStatusCode = HttpStatusCode.BadRequest): ModelAnswer<T>{
             return ModelAnswer(httpStatusCode, isError = true, messageError = this)
         }
-
     }
 }

@@ -7,12 +7,8 @@ import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.usersController
 import com.cit.utils.DateTimeUtils
-import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
-import com.cit.utils.ValidationUtils.Companion.isValidEmail
 import com.cit.utils.respond.uploadFile
 import io.ktor.http.*
-import java.io.File
-import java.time.LocalDate
 
 class ProfileController {
     suspend fun respondProfileCourses(idUser: Int): ModelAnswer<List<ModelCourseShort>> {
@@ -39,25 +35,26 @@ class ProfileController {
         return user.toPersonData().asAnswer()
     }
 
-    suspend fun uploadAvatarProfile(idUser: Int, format: String, binaryData: ByteArray): ModelAnswer<Boolean>{
+    suspend fun uploadAvatarProfile(idUser: Int, format: String, binaryData: ByteArray): ModelAnswer<String>{
         val filename = DateTimeUtils.getDateTimeFilename() + ".$format"
         val newFile = uploadFile(filename, binaryData)
         val result = usersController.updateAvatar(filename, idUser) && newFile.exists()
-        return if (result) true.asAnswer() else "Ошибка при сохранении, попробуйте позже".asError(HttpStatusCode.Conflict)
+        return if (result) filename.asAnswer() else "Ошибка при сохранении, попробуйте позже".asError(HttpStatusCode.Conflict)
     }
 
-    suspend fun respondPatchProfile(idUser: Int, pathBody: PatchUserBody): ModelAnswer<PersonData>{
-        if (pathBody.email != null) {
-            if (usersController.checkExistEmail(pathBody.email))
-                return "Такая почта уже используется".asError()
-            if (!pathBody.email.isValidEmail())
-                return "Почта не корректна".asError()
-        }
-        if (pathBody.dateBirthDay != null && pathBody.dateBirthDay.isAfter(LocalDate.now())){
-            return "День рождение не может быть в будущем".asError()
-        }
+    suspend fun respondPatchProfile(idUser: Int, body: ReceivePatchUserBody): ModelAnswer<PersonData>{
+        if (body.email != null && usersController.checkExistEmail(body.email))
+            return "Такая почта уже используется".asError()
 
-        val user = usersController.patchUser(idUser, pathBody)
+        val avatar = if (body.avatar != null && body.format != null){
+            val bytes = body.getByteArrayAvatar()!!
+            val answerAvatar = uploadAvatarProfile(idUser, body.format, bytes)
+            if (answerAvatar.isError)
+                return answerAvatar.changeBody()
+            answerAvatar.answer
+        }else { null }
+
+        val user = usersController.patchUser(idUser, body.toPatchUserBody(avatar))
         return user?.toPersonData()?.asAnswer() ?: "Ошибка, попробуйте еще раз".asError()
     }
 }

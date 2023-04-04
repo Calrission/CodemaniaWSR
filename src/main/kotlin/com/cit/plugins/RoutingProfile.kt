@@ -16,7 +16,7 @@ fun Application.configureProfile(){
 
         patch("profile"){
             val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@patch
-            val body = call.receive<ReceivePatchUserBody>().toPatchUserBody()
+            val body = call.receiveValidation<ReceivePatchUserBody>() ?:return@patch
             call.respondAnswer(profileController.respondPatchProfile(user.id, body))
         }
 

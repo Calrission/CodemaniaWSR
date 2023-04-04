@@ -119,8 +119,8 @@ suspend inline fun ApplicationCall.receiveUserByQueryToken(respondError: Boolean
 }
 
 suspend inline fun ApplicationCall.receiveUserByHeaderTokenOrIdUser(respondError: Boolean = true): User? {
-    val token = receiveHeaderParameter("Authorization", respondError)?.substringAfter("Bearer ")
-    val idUser = receiveHeaderParameter("idUser")?.toInt()
+    val token = receiveHeaderParameter("Authorization", false)?.substringAfter("Bearer ")
+    val idUser = receiveHeaderParameter("idUser", false)?.toInt()
     if (token != null){
         val user = usersController.getUserByToken(token)
         if (user == null && respondError){
@@ -136,6 +136,8 @@ suspend inline fun ApplicationCall.receiveUserByHeaderTokenOrIdUser(respondError
         }
         return user
     }else{
+        if (respondError)
+            respondError(error = "Please check header: Authorization: Bearer or idUser")
         return null
     }
 }

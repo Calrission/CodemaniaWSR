@@ -2,8 +2,13 @@ package com.cit.database.tables
 
 import com.cit.enums.Sex
 import com.cit.enums.Sex.Companion.isSex
+import com.cit.interfaces.ResultValidation
+import com.cit.interfaces.ResultValidation.Companion.goodValidation
+import com.cit.interfaces.ResultValidation.Companion.isBadResultValidation
+import com.cit.interfaces.Validation
 import com.cit.utils.DateTimeUtils
 import com.cit.utils.DateTimeUtils.Companion.parseDate
+import com.cit.utils.ValidationUtils.Companion.isValidEmail
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
@@ -52,11 +57,44 @@ data class ReceivePatchUserBody(
     val lastname: String? = null,
     val patronymic: String? = null,
     val sex: String? = null,
-    val dateBirthDay: String? = null
-){
-    fun toPatchUserBody(): PatchUserBody = PatchUserBody(
+    val dateBirthDay: String? = null,
+    val avatar: String? = null,
+    val format: String? = null
+): Validation{
+
+    fun getByteArrayAvatar(): ByteArray? {
+        avatar ?: return null
+        val avatarString = avatar.replace("[", "").replace("]", "")
+        return avatarString.split(", ").map { it.toByte() }.toByteArray()
+    }
+
+    override fun validate(): ResultValidation {
+        if (email != null){
+            if (email.isBlank())
+                return "Почта пустая".isBadResultValidation()
+            if (!email.isValidEmail())
+                return "Почта не соотвествует паттерну".isBadResultValidation()
+        }
+        if (firstname != null && firstname.isBlank())
+            return "Имя пустое".isBadResultValidation()
+        if (lastname != null && lastname.isBlank())
+            return "Фамилия пустая".isBadResultValidation()
+        if (patronymic != null && patronymic.isBlank())
+            return "Отчество пустое".isBadResultValidation()
+        if (sex != null && sex.isSex() == null)
+            return "В качестве пола доступно только ${Sex.getAllValueStr()}".isBadResultValidation()
+        if (dateBirthDay != null && dateBirthDay.parseDate() == null)
+            return "Дата рождения должна быть по паттерну. Пример: 18.12.2001".isBadResultValidation()
+        if (dateBirthDay != null && dateBirthDay.parseDate()!!.isAfter(LocalDate.now()))
+            return "День рождение не может быть в будущем".isBadResultValidation()
+        if (avatar != null && format == null)
+            return "При передачи аватарки необходим format".isBadResultValidation()
+        return goodValidation()
+    }
+
+    fun toPatchUserBody(avatar: String?): PatchUserBody = PatchUserBody(
         email, firstname, lastname,
-        patronymic, sex?.isSex(), dateBirthDay?.parseDate()
+        patronymic, sex?.isSex(), dateBirthDay?.parseDate(), avatar
     )
 }
 
@@ -66,7 +104,8 @@ data class PatchUserBody(
     val lastname: String?,
     val patronymic: String?,
     val sex: Sex?,
-    val dateBirthDay: LocalDate?
+    val dateBirthDay: LocalDate?,
+    val avatar: String?
 )
 
 data class User(

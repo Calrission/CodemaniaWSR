@@ -9,6 +9,8 @@ import io.ktor.server.routing.*
 
 fun Application.configureCatalog(){
     routing{
+
+        // на swagger не документировать
         get("catalog/tags"){
             call.respondAnswer(catalogController.getCatalogTags().asAnswer())
         }

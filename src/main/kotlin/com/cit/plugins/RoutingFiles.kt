@@ -1,12 +1,10 @@
 package com.cit.plugins
 
-import com.cit.models.ModelAnswer
 import com.cit.models.ModelAnswer.Companion.asAnswer
-import com.cit.utils.receiveByteArray
-import com.cit.utils.receivePathParameter
-import com.cit.utils.receiveTransformPrimitive
+import com.cit.models.ModelAnswer.Companion.asError
+import com.cit.utils.*
+import com.cit.utils.respond.respondAudio
 import com.cit.utils.respond.respondImage
-import com.cit.utils.respondAnswer
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
@@ -19,10 +17,21 @@ fun Application.configureFilesRouting(){
         }
 
         post("media"){
-            val filename = call.receiveTransformPrimitive<String>()?.replace("\n", "")?.replace("\r", "") ?: return@post
+            val filenameHeader = call.receiveHeaderParameter("filename")
+            val filename = call.receiveTransformPrimitive<String>()?.replace("\n", "")?.replace("\r", "") ?: filenameHeader
+            if (filename == null) {
+                call.respondAnswer("Please check body or header: filename".asError<Unit>())
+                return@post
+            }
             call.respondImage(filename)
         }
 
+        get("media/{audio}"){
+            val audio = call.receivePathParameter("audio") ?: return@get
+            call.respondAudio(audio)
+        }
+
+        // на swagger не документировать
         post("convertImage"){
             val image = call.receiveByteArray() ?: return@post
             call.respondAnswer(image.contentToString().asAnswer())

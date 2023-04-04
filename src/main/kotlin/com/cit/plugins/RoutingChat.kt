@@ -11,7 +11,9 @@ import com.cit.models.ModelSystemMessage.Companion.isModelSystemMessage
 import com.cit.profileController
 import com.cit.usersController
 import com.cit.utils.*
+import com.cit.utils.respond.TypeMessageChat
 import com.cit.utils.respond.respondAudio
+import com.cit.utils.respond.sendSerializedModel
 import com.cit.utils.respond.uploadFile
 import com.cit.webSocketChatController
 import com.google.gson.Gson
@@ -19,6 +21,7 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import kotlinx.serialization.Serializable
 import org.h2.store.fs.FileUtils
 import java.lang.Exception
 import java.time.LocalDateTime
@@ -33,7 +36,7 @@ fun Application.configureChat() {
             val connection = webSocketChatController.newConnectionUser(this, user)
 
             try {
-                connection.session.sendSerialized(user.toPersonData())
+                connection.session.sendSerializedModel(user.toPersonData(), TypeMessageChat.PERSON)
                 for (frame in incoming) {
                     frame as? Frame.Text ?: continue
                     val receivedText: String = frame.readText()
@@ -41,22 +44,22 @@ fun Application.configureChat() {
                         if (receivedText == "/chats") {
                             val answer = chatController.respondUserChats(connection.user.id)
                             if (answer.isError) {
-                                connection.session.send(answer.messageError)
+                                connection.session.sendSerializedModel(answer.messageError)
                             } else {
-                                connection.session.sendSerialized(answer.answer)
+                                connection.session.sendSerializedModel(answer.answer, TypeMessageChat.CHATS)
                             }
                         }else if ("/chat" in receivedText){
                             val idChat = try {
                                 receivedText.substringAfter("/chat ").toInt()
                             }catch (e: Exception){
-                                connection.session.send("Не указан idChat. Пример: '/chat 1'")
+                                connection.session.sendSerializedModel("Не указан idChat. Пример: '/chat 1'")
                                 null
                             } ?: continue
                             val answer = chatController.respondChat(connection.user.id, idChat)
                             if (answer.isError) {
-                                connection.session.send(answer.messageError)
+                                connection.session.sendSerializedModel(answer.messageError)
                             } else {
-                                connection.session.sendSerialized(answer.answer)
+                                connection.session.sendSerializedModel(answer.answer, TypeMessageChat.CHAT)
                             }
                         }else{
                             val idMessage = try {
@@ -67,9 +70,11 @@ fun Application.configureChat() {
                             } ?: continue
                             val answer = chatController.respondGetAudioFromMessage(idMessage)
                             if (answer.isError)
-                                connection.session.send(answer.messageError)
+                                connection.session.sendSerializedModel(answer.messageError)
                             else
-                                connection.session.send(getBytesAudio(answer.answer!!).contentToString())
+                                connection.session.sendSerializedModel(getBytesAudio(answer.answer!!).contentToString(),
+                                    TypeMessageChat.AUDIO
+                                )
                         }
                         continue
                     }
@@ -80,7 +85,7 @@ fun Application.configureChat() {
                     else
                         chatController.newMessage(inComingMessage.text ?: "", inComingMessage.idChat, connection.user.id, LocalDateTime.now(), inComingMessage.isAudio)
                     if (message == null) {
-                        connection.session.sendSerialized("Сообщение не отправленно".isModelErrorSystemMessage())
+                        connection.session.sendSerializedModel("Сообщение не отправленно".isModelErrorSystemMessage())
                         continue
                     }
                     webSocketChatController.sendNewUserMessage(message.toMessageChat())
@@ -90,8 +95,9 @@ fun Application.configureChat() {
             }finally {
                 webSocketChatController.removeConnection(connection)
             }
-
         }
+
+
 
         get("chats"){
             val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@get

@@ -28,7 +28,7 @@ fun Application.configureFilesRouting(){
 
         get("media/{audio}"){
             val audio = call.receivePathParameter("audio") ?: return@get
-            call.respondAudio(audio)
+            call.respondAudio("$audio.mp3")
         }
 
         // на swagger не документировать

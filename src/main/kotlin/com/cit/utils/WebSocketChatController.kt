@@ -4,6 +4,7 @@ import com.cit.database.tables.User
 import com.cit.models.Connection
 import com.cit.models.MessageChat
 import com.cit.models.ModelSystemMessage.Companion.isModelSystemMessage
+import com.cit.utils.respond.sendSerializedModel
 import io.ktor.server.websocket.*
 import java.util.*
 import kotlin.collections.LinkedHashSet
@@ -33,7 +34,7 @@ class WebSocketChatController {
     suspend fun sendNewUserMessage(messageChat: MessageChat){
         connections.forEach {
             messageChat.isYou = it.user.id == messageChat.idUser
-            it.session.sendSerialized(messageChat)
+            it.session.sendSerializedModel(messageChat)
         }
     }
 }

@@ -29,3 +29,11 @@ fun checkExistImage(imageName: String): Boolean{
 fun checkExistFile(filePath: String): Boolean{
     return File(filePath).exists()
 }
+
+fun saveAudioByteArray(idAudio: Int, byteArray: ByteArray): String?{
+    val filename = DateTimeUtils.getDateTimeFilename()
+    val filePath =  LocalPropertiesUtils.getLocalProperty("audio_path") + "/$idAudio.mp3"
+    val file = File(filePath)
+    file.writeBytes(byteArray)
+    return if (file.exists()) filename else null
+}

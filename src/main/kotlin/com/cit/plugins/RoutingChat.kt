@@ -31,8 +31,7 @@ import kotlin.collections.LinkedHashSet
 fun Application.configureChat() {
     routing {
         webSocket("/chat"){
-            val token = call.request.queryParameters["token"] ?: return@webSocket
-            val user = usersController.getUserByToken(token) ?: return@webSocket
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@webSocket
             val connection = webSocketChatController.newConnectionUser(this, user)
 
             try {

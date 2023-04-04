@@ -8,7 +8,11 @@ import com.cit.models.ModelAnswer
 import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.utils.LocalPropertiesUtils
+import com.cit.utils.respondAnswer
+import com.cit.utils.saveAudioByteArray
 import io.ktor.http.*
+import io.ktor.server.application.*
+import org.h2.store.fs.FileUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
@@ -57,8 +61,27 @@ class ChatController {
     suspend fun getMessage(idMessage: Int): Message? = daoMessages.selectSingle { Messages.id eq idMessage }
 
     suspend fun newMessage(message: String, idChat: Int, idUser: Int, dateTime: LocalDateTime, isAudio: Boolean): Message? {
-        val model = InsertMessage(message, isAudio, idUser, idChat, dateTime)
-        return daoMessages.insert(model)
+        val text = if (isAudio){ "" }else { message }
+        val model = InsertMessage(text, isAudio, idUser, idChat, dateTime)
+        val modelMessage = daoMessages.insert(model) ?: return null
+        val idMessage = modelMessage.id
+        if (isAudio){
+            val byteArray = message.replace("[", "").replace("]", "").split(", ").map { it.toByte() }.toByteArray()
+            if(!chatController.checkAccessUserToMessage(idUser, idMessage)){
+                return null
+            }
+            if (!chatController.checkExistMessage(idMessage)) {
+                return null
+            }
+            if (!chatController.checkIsAudioMessage(idMessage)) {
+                return null
+            }
+            if (chatController.checkExistAudioFileForAudioMessage(idMessage)) {
+                return null
+            }
+            saveAudioByteArray(idMessage, byteArray)
+        }
+        return modelMessage
     }
 
     suspend fun checkAccessUserToMessage(idUser: Int, idMessage: Int): Boolean {

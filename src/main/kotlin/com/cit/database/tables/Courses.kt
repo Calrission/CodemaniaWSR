@@ -90,14 +90,12 @@ data class ModelCourseShort(
 data class ItemPlan(
     val title: String,
     val description: String,
-    val duration: Int,
-    val file: String?,
-    val commentFile: String?
+    val duration: Int
 ){
     fun toSafe(): SafeItemPlan = SafeItemPlan(title, description, duration)
 
     fun toLessonBody(idCourse: Int, idUser: Int, dateTime: LocalDateTime, isComplete: Boolean = false): LessonBody = LessonBody(
-        idCourse, idUser, title, description, dateTime, duration, isComplete, file, commentFile
+        idCourse, idUser, title, description, dateTime, duration, isComplete
     )
 }
 

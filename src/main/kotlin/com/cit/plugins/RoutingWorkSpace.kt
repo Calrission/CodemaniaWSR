@@ -32,6 +32,8 @@ fun Application.configureWorkSpace(){
         post("workSpace/confirmLesson"){
             val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@post
             val idLesson = call.receiveQueryParameter("idLesson")?.toInt() ?: return@post
+            val commentFile = call.receiveQueryParameter("commentFile") ?: ""
+            val file = call.receiveByteArray()
 
             call.respondAnswer(workSpaceController.respondConfirmLesson(idLesson, user.id))
         }

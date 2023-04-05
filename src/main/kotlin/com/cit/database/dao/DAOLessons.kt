@@ -15,9 +15,7 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody, LessonBody>() {
             description = row[Lessons.description],
             datetime = row[Lessons.datetime],
             duration = row[Lessons.duration],
-            isComplete = row[Lessons.isComplete],
-            file = row[Lessons.file],
-            commentFile = row[Lessons.commentFile]
+            isComplete = row[Lessons.isComplete]
         )
     }
 
@@ -56,8 +54,6 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody, LessonBody>() {
                 it[duration] = model.duration
                 it[isComplete] = model.isComplete
                 it[idUser] = model.idUser
-                it[file] = model.file
-                it[commentFile] = model.commentFile
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -72,8 +68,6 @@ class DAOLessons: DAOTable<Lesson, Lessons, LessonBody, LessonBody>() {
                 it[duration] = model.duration
                 it[isComplete] = model.isComplete
                 it[idUser] = model.idUser
-                it[file] = model.file
-                it[commentFile] = model.commentFile
             } > 0
         }
     }

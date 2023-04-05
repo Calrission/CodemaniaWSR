@@ -15,8 +15,6 @@ object Lessons: Table() {
     val datetime = datetime("datetime")
     val duration = integer("duration")
     val isComplete = bool("isComplete")
-    val file = varchar("file", 250).nullable()
-    val commentFile = varchar("commentFile", 5000).nullable()
 
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
@@ -29,14 +27,12 @@ data class Lesson(
     val description: String,
     val datetime: LocalDateTime,
     val duration: Int,
-    val isComplete: Boolean,
-    val file: String?,
-    val commentFile: String?,
+    val isComplete: Boolean
 ) {
     fun toModelLesson(): ModelLesson = ModelLesson(
         id, idUser, title, description,
         datetime.format(DateTimeUtils.dateTimeFormatter),
-        duration, isComplete, file, commentFile
+        duration, isComplete
     )
 }
 
@@ -48,9 +44,7 @@ data class ModelLesson(
     val description: String,
     val datetime: String,
     val duration: Int,
-    val isComplete: Boolean,
-    val file: String?,
-    val commentFile: String?,
+    val isComplete: Boolean
 )
 
 data class LessonBody(
@@ -60,7 +54,5 @@ data class LessonBody(
     val description: String,
     val datetime: LocalDateTime,
     val duration: Int,
-    val isComplete: Boolean,
-    val file: String? = null,
-    val commentFile: String? = null,
+    val isComplete: Boolean
 )

@@ -20,10 +20,11 @@ fun Application.configureProfile(){
         }
 
         get("profile/courses"){
-            val idUser = call.receiveQueryParameter("idUser")?.toInt() ?: return@get
-            call.respondAnswer(profileController.respondProfileCourses(idUser))
+            val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@get
+            call.respondAnswer(profileController.respondProfileCourses(user.id))
         }
 
+        // на swagger не документировать
         get("profile/tags"){
             val idUser = call.receiveQueryParameter("idUser")?.toInt() ?: return@get
             call.respondAnswer(profileController.respondProfileTags(idUser))

@@ -9,6 +9,7 @@ import com.cit.usersController
 import com.cit.utils.DateTimeUtils
 import com.cit.utils.respond.uploadAudio
 import com.cit.utils.respond.uploadImage
+import io.ktor.client.request.forms.*
 import io.ktor.http.*
 
 class ProfileController {
@@ -47,12 +48,12 @@ class ProfileController {
         if (body.email != null && usersController.checkExistEmail(body.email))
             return "Такая почта уже используется".asError()
 
-        val avatar = if (body.avatar != null && body.format != null){
-            if (body.avatar.isEmpty())
+        val avatar = if (body.avatar != null && (body.format != null || body.avatar.isBlank())){
+            if (body.avatar.isBlank())
                 ""
             else {
                 val bytes = body.getByteArrayAvatar()!!
-                val imageName = DateTimeUtils.getDateTimeFilename()
+                val imageName = DateTimeUtils.getDateTimeFilename() + "${body.format}"
                 val newFile = uploadImage(imageName, bytes)
                 if (!newFile.exists())
                     return "Аватарка не сохраненна".asError()

@@ -87,7 +87,7 @@ data class ReceivePatchUserBody(
             return "Дата рождения должна быть по паттерну. Пример: 18.12.2001".isBadResultValidation()
         if (dateBirthDay != null && dateBirthDay.parseDate()!!.isAfter(LocalDate.now()))
             return "День рождение не может быть в будущем".isBadResultValidation()
-        if (avatar != null && format == null)
+        if (!avatar.isNullOrBlank() && format == null)
             return "При передачи аватарки необходим format".isBadResultValidation()
         return goodValidation()
     }

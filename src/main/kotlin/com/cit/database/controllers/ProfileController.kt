@@ -53,7 +53,7 @@ class ProfileController {
                 ""
             else {
                 val bytes = body.getByteArrayAvatar()!!
-                val imageName = DateTimeUtils.getDateTimeFilename() + "${body.format}"
+                val imageName = DateTimeUtils.getDateTimeFilename() + ".${body.format}"
                 val newFile = uploadImage(imageName, bytes)
                 if (!newFile.exists())
                     return "Аватарка не сохраненна".asError()

@@ -1,32 +1,24 @@
 package com.cit.plugins
 
 import com.cit.chatController
-import com.cit.models.Connection
 import com.cit.models.InComingMessage
-import com.cit.models.ModelAnswer
 import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.models.ModelSystemMessage.Companion.isModelErrorSystemMessage
-import com.cit.models.ModelSystemMessage.Companion.isModelSystemMessage
-import com.cit.profileController
-import com.cit.usersController
 import com.cit.utils.*
 import com.cit.utils.respond.TypeMessageChat
 import com.cit.utils.respond.respondAudio
 import com.cit.utils.respond.sendSerializedModel
-import com.cit.utils.respond.uploadFile
+import com.cit.utils.respond.uploadAudio
 import com.cit.webSocketChatController
 import com.google.gson.Gson
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
-import kotlinx.serialization.Serializable
-import org.h2.store.fs.FileUtils
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.LinkedHashSet
 
 fun Application.configureChat() {
     routing {
@@ -141,7 +133,7 @@ fun Application.configureChat() {
             }
 
             val filename = "$idMessage.mp3"
-            val newFile = uploadFile(filename, bytes)
+            val newFile = uploadAudio(filename, bytes)
             if (newFile.exists())
                 call.respondAnswer(filename.asAnswer())
             else

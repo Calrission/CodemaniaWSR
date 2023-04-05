@@ -7,7 +7,8 @@ import com.cit.models.ModelAnswer.Companion.asAnswer
 import com.cit.models.ModelAnswer.Companion.asError
 import com.cit.usersController
 import com.cit.utils.DateTimeUtils
-import com.cit.utils.respond.uploadFile
+import com.cit.utils.respond.uploadAudio
+import com.cit.utils.respond.uploadImage
 import io.ktor.http.*
 
 class ProfileController {
@@ -37,9 +38,9 @@ class ProfileController {
 
     suspend fun uploadAvatarProfile(idUser: Int, format: String, binaryData: ByteArray): ModelAnswer<String>{
         val filename = DateTimeUtils.getDateTimeFilename() + ".$format"
-        val newFile = uploadFile(filename, binaryData)
+        val newFile = uploadImage(filename, binaryData)
         val result = usersController.updateAvatar(filename, idUser) && newFile.exists()
-        return if (result) filename.asAnswer() else "Ошибка при сохранении, попробуйте позже".asError(HttpStatusCode.Conflict)
+        return if (result) filename.asAnswer() else "Ошибка при сохранении, попробуйте позже".asError()
     }
 
     suspend fun respondPatchProfile(idUser: Int, body: ReceivePatchUserBody): ModelAnswer<PersonData>{
@@ -47,11 +48,16 @@ class ProfileController {
             return "Такая почта уже используется".asError()
 
         val avatar = if (body.avatar != null && body.format != null){
-            val bytes = body.getByteArrayAvatar()!!
-            val answerAvatar = uploadAvatarProfile(idUser, body.format, bytes)
-            if (answerAvatar.isError)
-                return answerAvatar.changeBody()
-            answerAvatar.answer
+            if (body.avatar.isEmpty())
+                ""
+            else {
+                val bytes = body.getByteArrayAvatar()!!
+                val imageName = DateTimeUtils.getDateTimeFilename()
+                val newFile = uploadImage(imageName, bytes)
+                if (!newFile.exists())
+                    return "Аватарка не сохраненна".asError()
+                imageName
+            }
         }else { null }
 
         val user = usersController.patchUser(idUser, body.toPatchUserBody(avatar))

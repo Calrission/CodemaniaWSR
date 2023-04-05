@@ -4,7 +4,6 @@ import com.cit.database.tables.ReceivePatchUserBody
 import com.cit.profileController
 import com.cit.utils.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
 import io.ktor.server.routing.*
 
 fun Application.configureProfile(){

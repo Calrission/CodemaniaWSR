@@ -80,6 +80,8 @@ class DAOUser: DAOTable<User, Users, InsertUserBody, PatchUserBody>() {
                     it[email] = model.email
                 if (model.dateBirthDay != null)
                     it[dateBirthDay] = model.dateBirthDay
+                if (model.avatar != null)
+                    it[avatar] = model.avatar.ifEmpty { null }
             } > 0
         }
     }

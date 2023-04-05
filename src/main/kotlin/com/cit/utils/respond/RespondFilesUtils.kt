@@ -1,7 +1,6 @@
 package com.cit.utils.respond
 
 import com.cit.models.ModelAnswer.Companion.asError
-import com.cit.utils.LocalPropertiesUtils
 import com.cit.utils.LocalPropertiesUtils.Companion.getLocalProperty
 import com.cit.utils.respondAnswer
 import io.ktor.http.*
@@ -32,8 +31,16 @@ suspend inline fun ApplicationCall.respondFile(pathFile: String, filename: Strin
     }
 }
 
-fun uploadFile(filename: String, byteArray: ByteArray): File{
+fun uploadAudio(filename: String, byteArray: ByteArray): File{
     val file = File("${getLocalProperty("audio_path")}/${filename}")
     file.writeBytes(byteArray)
     return file
 }
+
+
+fun uploadImage(nameImage: String, byteArray: ByteArray): File{
+    val file = File("${getLocalProperty("images_path")}/${nameImage}")
+    file.writeBytes(byteArray)
+    return file
+}
+

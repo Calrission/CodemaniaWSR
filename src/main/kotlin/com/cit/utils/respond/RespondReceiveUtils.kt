@@ -31,12 +31,12 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveTransform(respondErr
     return null
 }
 
-suspend inline fun <reified T : Any> ApplicationCall.receiveTransformPrimitive(respondError: Boolean = true): T?{
+suspend inline fun ApplicationCall.receiveTransformPrimitive(respondError: Boolean = true): String?{
     try {
-        return receive()
+        return receive<String>().replace("\n", "").replace("\r", "").ifEmpty { null }
     } catch (e: Exception) {
         if (respondError)
-            respondError(error = "Please check body, it should be ${T::class.java.name}")
+            respondError(error = "Please check exist body")
     }
     return null
 }

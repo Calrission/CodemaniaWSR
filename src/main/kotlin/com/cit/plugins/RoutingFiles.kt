@@ -17,8 +17,9 @@ fun Application.configureFilesRouting(){
         }
 
         post("media"){
-            val filenameHeader = call.receiveHeaderParameter("filename")
-            val filename = call.receiveTransformPrimitive<String>()?.replace("\n", "")?.replace("\r", "") ?: filenameHeader
+            val filenameHeader = call.receiveHeaderParameter("filename", false)
+            val filenameBody = call.receiveTransformPrimitive()
+            val filename = filenameBody ?: filenameHeader
             if (filename == null) {
                 call.respondAnswer("Please check body or header: filename".asError<Unit>())
                 return@post

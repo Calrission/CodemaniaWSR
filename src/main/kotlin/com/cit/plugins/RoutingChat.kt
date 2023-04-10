@@ -56,7 +56,7 @@ fun Application.configureChat() {
                             val idMessage = try {
                                 receivedText.substringAfter("/audio ").toInt()
                             }catch (e: Exception){
-                                connection.session.send("Не указан idMessage. Пример: '/audio 47'")
+                                connection.session.send("Не указан idMessage. Пример: /audio 47")
                                 null
                             } ?: continue
                             val answer = chatController.respondGetAudioFromMessage(idMessage)
@@ -87,8 +87,6 @@ fun Application.configureChat() {
                 webSocketChatController.removeConnection(connection)
             }
         }
-
-
 
         get("chats"){
             val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@get

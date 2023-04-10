@@ -44,8 +44,8 @@ class DAOChats: DAOTable<Chat, Chats, InsertChat, Chat>() {
     override suspend fun insert(model: InsertChat): Chat? {
         return DatabaseFactory.pushQuery {
             Chats.insert {
-                it[firstIdUser] = firstIdUser
-                it[secondIdUser] = secondIdUser
+                it[firstIdUser] = model.firstIdUser
+                it[secondIdUser] = model.secondIdUser
             }.resultedValues?.singleOrNull()?.let(::resultRowToModel)
         }
     }
@@ -53,8 +53,8 @@ class DAOChats: DAOTable<Chat, Chats, InsertChat, Chat>() {
     override suspend fun edit(model: Chat, where: SqlExpressionBuilder.() -> Op<Boolean>): Boolean {
         return DatabaseFactory.pushQuery {
             Chats.update(where) {
-                it[firstIdUser] = firstIdUser
-                it[secondIdUser] = secondIdUser
+                it[firstIdUser] = model.firstIdUser
+                it[secondIdUser] = model.secondIdUser
             } > 0
         }
     }

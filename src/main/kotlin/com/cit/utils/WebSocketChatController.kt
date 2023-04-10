@@ -33,8 +33,10 @@ class WebSocketChatController {
 
     suspend fun sendNewUserMessage(messageChat: MessageChat){
         connections.forEach {
-            messageChat.isYou = it.user.id == messageChat.idUser
-            it.session.sendSerializedModel(messageChat)
+            if (it.user.id == messageChat.idUser){
+                messageChat.isYou = it.user.id == messageChat.idUser
+                it.session.sendSerializedModel(messageChat)
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import com.cit.usersController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.jetbrains.exposed.sql.and
+import java.time.LocalDate
 
 class CoursesController {
     private val daoCourses = DAOCourses()
@@ -24,6 +25,8 @@ class CoursesController {
     suspend fun getCourse(idCourse: Int): Course? = daoCourses.selectSingle { Courses.id eq idCourse }
 
     suspend fun getSoldCourse(idCourse: Int, idUser: Int): SoldModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toSoldModelCourse(idUser)
+
+    suspend fun newSoldCourse(idCourse: Int, idUser: Int): Boolean = daoSoldCourse.insert(SoldCourseBody(idCourse, idUser, LocalDate.now())) != null
 
     private suspend fun Course.toModelCourse(): ModelCourse{
         val tags = tagsController.getTagsCourse(id).map { it.id }

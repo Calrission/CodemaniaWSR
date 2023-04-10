@@ -59,12 +59,12 @@ class CatalogController {
         val bodies = planItems.mapIndexed { pos, it ->
             it.toLessonBody(idCourse, idUser, dateTimes[pos])
         }
+        val resultInsertSold = coursesController.newSoldCourse(idCourse, idUser)
+        if (!resultInsertSold)
+            return false
         val resultsCreateLessons = lessonsController.insertNewLessons(bodies)
-        val resultsCreateChats = createChats(idUser, idsMentors)
-        val results = resultsCreateLessons.mapIndexed { pos, it ->
-            resultsCreateChats[pos] == it
-        }
-        return results.any()
+        createChats(idUser, idsMentors)
+        return resultsCreateLessons.all { it }
     }
 
     private suspend fun createChats(idUser: Int, idsMentors: List<Int>): List<Boolean> {

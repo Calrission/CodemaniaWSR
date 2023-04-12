@@ -1,5 +1,6 @@
 package com.cit.utils
 
+import com.cit.chatController
 import com.cit.database.tables.User
 import com.cit.models.Connection
 import com.cit.models.MessageChat
@@ -32,8 +33,9 @@ class WebSocketChatController {
     }
 
     suspend fun sendNewUserMessage(messageChat: MessageChat){
+        val chat = chatController.getChat(messageChat.idChat, messageChat.idUser) ?: return
         connections.forEach {
-            if (it.user.id == messageChat.idUser){
+            if (messageChat.idUser in chat.getUsersIds()){
                 messageChat.isYou = it.user.id == messageChat.idUser
                 it.session.sendSerializedModel(messageChat)
             }

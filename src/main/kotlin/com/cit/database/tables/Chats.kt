@@ -23,6 +23,8 @@ data class Chat(
         val second = usersController.getUser(secondIdUser)?.toModelHuman() ?: return null
         return ModelChat(id, first, second)
     }
+
+    fun getUsersIds(): List<Int> = listOf(firstIdUser, secondIdUser)
 }
 
 data class InsertChat(
@@ -37,6 +39,8 @@ data class ModelChat(
     val second: ModelHuman
 ){
     fun addMessages(messages: List<SafeMessage>): ChatWithMessages = ChatWithMessages(this, messages)
+
+    fun getUsers(): List<ModelHuman> = listOf(first, second)
 }
 @Serializable
 data class ChatWithMessages(

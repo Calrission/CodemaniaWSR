@@ -52,8 +52,8 @@ class LessonsController {
         val targetTime = targetDateTime.toLocalTime()
         val targetUnix = targetDate.atTime(targetTime).toEpochSecond(ZoneOffset.UTC)
 
-        val nextDate = getNextDateWithLessonUser(idUser, targetDate)
-        val prevDate = getPrevDateWithLesson(idUser, targetDate)
+        val nextDate = getNextInclusiveDateWithLessonUser(idUser, targetDate)
+        val prevDate = getPrevInclusiveDateWithLesson(idUser, targetDate)
 
         val nextDateUnix = nextDate?.atTime(targetTime)?.toEpochSecond(ZoneOffset.UTC)
         val prevDateUnix = prevDate?.atTime(targetTime)?.toEpochSecond(ZoneOffset.UTC)
@@ -83,6 +83,22 @@ class LessonsController {
         val lessons = getAllLessonsUser(idUser)
         val prevDate = lessons
             .filter { it.datetime.toLocalDate().isBefore(endDate) }
+            .maxOfOrNull { it.datetime.toLocalDate() }
+        return prevDate
+    }
+
+    suspend fun getNextInclusiveDateWithLessonUser(idUser: Int, startDate: LocalDate): LocalDate?{
+        val lessons = getAllLessonsUser(idUser)
+        val nextDate = lessons
+            .filter { !it.datetime.toLocalDate().isBefore(startDate) }
+            .minOfOrNull { it.datetime.toLocalDate() }
+        return nextDate
+    }
+
+    suspend fun getPrevInclusiveDateWithLesson(idUser: Int, endDate: LocalDate): LocalDate?{
+        val lessons = getAllLessonsUser(idUser)
+        val prevDate = lessons
+            .filter { !it.datetime.toLocalDate().isAfter(endDate) }
             .maxOfOrNull { it.datetime.toLocalDate() }
         return prevDate
     }

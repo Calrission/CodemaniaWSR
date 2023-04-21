@@ -45,8 +45,7 @@ class IdentityController {
     }
 
     suspend fun signOut(idUser: Int): ModelAnswer<Boolean>{
-        setNewTokenUser(idUser) // Просто ставим новый токен и не сообщяем его пользователю :)
-        return ModelAnswer(answer = true)
+        return true.asAnswer()
     }
 
     suspend fun setNewTokenUser(userId: Int): String?{

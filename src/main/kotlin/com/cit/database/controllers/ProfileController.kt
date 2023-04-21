@@ -19,8 +19,7 @@ class ProfileController {
     }
 
     suspend fun respondProfileCourse(idCourse: Int, idUser: Int): ModelAnswer<SoldModelCourse> {
-        val course = coursesController.getSoldCourse(idCourse, idUser)
-        if (course == null || !coursesController.checkBuyCourseUser(idUser, idCourse))
+        val course = coursesController.getSoldCourse(idCourse, idUser) ?:
             return "Курс пользователя не найден".asError(HttpStatusCode.NotFound)
         return course.asAnswer()
     }

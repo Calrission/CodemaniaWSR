@@ -24,7 +24,7 @@ class CoursesController {
 
     suspend fun getCourse(idCourse: Int): Course? = daoCourses.selectSingle { Courses.id eq idCourse }
 
-    suspend fun getSoldCourse(idCourse: Int, idUser: Int): SoldModelCourse? = daoCourses.selectSingle { Courses.id eq idCourse }?.toSoldModelCourse(idUser)
+    suspend fun getSoldCourse(idCourse: Int, idUser: Int): SoldModelCourse? = daoSoldCourse.selectSingle { (SoldCourses.id eq idCourse).and(SoldCourses.idUser eq idUser) }?.toModelSoldCourse()
 
     suspend fun newSoldCourse(idCourse: Int, idUser: Int): Boolean = daoSoldCourse.insert(SoldCourseBody(idCourse, idUser, LocalDate.now())) != null
 

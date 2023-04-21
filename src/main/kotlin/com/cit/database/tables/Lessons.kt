@@ -45,7 +45,11 @@ data class ModelLesson(
     val datetime: String,
     val duration: Int,
     val isComplete: Boolean
-)
+){
+    fun toSafeItemPlan(): SafeItemPlan{
+        return SafeItemPlan(title, description, duration)
+    }
+}
 
 data class LessonBody(
     val idCourse: Int,

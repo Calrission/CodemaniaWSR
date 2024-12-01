@@ -1,0 +1,11 @@
+host_db=host
+port_db=5432
+name_db=codemania
+user_db=user
+password_db=pass
+
+host=0.0.0.0
+port=8080
+
+images_path=D:\\imgs
+audio_path=D:\\imgs

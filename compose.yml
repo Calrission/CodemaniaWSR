@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: codemania_app
+      image: codemania_backend
+      volumes:
+        - ./images:/app/images
+        - ./media:/app/media
+      networks:
+        - codemania-net
+      ports:
+        - "8502:8502"
+      depends_on:
+        - db
+      command: >
+        sh -c "java -jar /app/codemania.jar && /app/restore_db.sh"
+
+  db:
+    container_name: codemania_db
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=value
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=codemania
+    ports:
+      - "8501:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      - codemania-net
+
+networks:
+  codemania-net:
+    external: true

@@ -13,9 +13,14 @@ import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.doublereceive.*
+import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
 import java.time.Duration
+import io.ktor.server.application.*
+import io.ktor.server.plugins.swagger.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 val coursesController = CoursesController()
 val catalogController = CatalogController()
@@ -55,6 +60,12 @@ fun Application.module() {
     }
 
     initDataBase()
+
+    routing {
+        swaggerUI(path = "swagger") {
+            version = "1.0.0"
+        }
+    }
 
     configureIdentityRouting()
     configureCatalog()

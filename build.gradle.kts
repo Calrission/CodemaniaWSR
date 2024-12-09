@@ -4,12 +4,13 @@ val logback_version: String by project
 val exposed_version : String by project
 val h2_version : String by project
 val postgresql_version : String by project
+val swagger_codegen_version : String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "2.1.0"
     id("io.ktor.plugin") version "2.2.4"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.0"
 }
 
 group = "com.cit"
@@ -46,6 +47,9 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-server-swagger:$ktor_version")
+    implementation("io.swagger.codegen.v3:swagger-codegen-generators:$swagger_codegen_version")
+    implementation("io.ktor:ktor-server-openapi:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("com.google.code.gson:gson:2.10.1")

@@ -10,7 +10,9 @@ import com.cit.utils.receiveUserByHeaderTokenOrIdUser
 import com.cit.utils.receiveValidation
 import com.cit.utils.respondAnswer
 import io.ktor.server.application.*
+import io.ktor.server.plugins.openapi.*
 import io.ktor.server.routing.*
+import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 
 fun Application.configureIdentityRouting(){
 
@@ -39,6 +41,10 @@ fun Application.configureIdentityRouting(){
             val user = call.receiveUserByHeaderTokenOrIdUser() ?: return@post
             val newPassword = call.receiveQueryParameter("newPassword") ?: return@post
             call.respondAnswer(identityController.respondChangePassword(user.id, newPassword))
+        }
+
+        openAPI(path="openapi", swaggerFile = "openapi/documentation.yaml") {
+            codegen = StaticHtmlCodegen()
         }
     }
 }

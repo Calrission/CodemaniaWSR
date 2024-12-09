@@ -1,0 +1,558 @@
+openapi: "3.1.0"
+info:
+  title: "com_cit_codemania_api API"
+  description: "com_cit_codemania_api API"
+  version: "1.0.0"
+servers:
+- url: "https://com_cit_codemania_api"
+paths:
+  /audio/{idMessage}:
+    get:
+      description: ""
+      parameters:
+      - name: "idMessage"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: "OK <br> A file response"
+          content:
+            application/*:
+              schema:
+                type: "object"
+                format: "binary"
+    post:
+      description: ""
+      parameters:
+      - name: "idMessage"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "string"
+                format: "byte"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /chat:
+    get:
+      description: ""
+      parameters:
+      - name: "Connection"
+        in: "header"
+        required: true
+        description: "Websocket Connection parameter"
+        schema:
+          type: "string"
+      - name: "Upgrade"
+        in: "header"
+        required: true
+        description: "Websocket Upgrade parameter"
+        schema:
+          type: "string"
+      - name: "Sec-WebSocket-Key"
+        in: "header"
+        required: true
+        description: "Websocket Sec-WebSocket-Key parameter"
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "101":
+          description: "Switching Protocols"
+          headers:
+            Connection:
+              required: true
+              schema:
+                type: "string"
+            Upgrade:
+              required: true
+              schema:
+                type: "string"
+            Sec-WebSocket-Accept:
+              required: true
+              schema:
+                type: "string"
+  /chats:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /catalog/course:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /catalog/courses:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /catalog/materials:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /catalog/orderCreate:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /catalog/tags:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /convertImage:
+    post:
+      description: "на swagger не документировать"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "string"
+                format: "byte"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /image/{filename}:
+    get:
+      description: ""
+      parameters:
+      - name: "filename"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: "OK <br> A file response"
+          content:
+            application/*:
+              schema:
+                type: "object"
+                format: "binary"
+  /media:
+    post:
+      description: ""
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: "string"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: "OK <br> A file response"
+          content:
+            application/*:
+              schema:
+                type: "object"
+                format: "binary"
+  /media/{audio}:
+    get:
+      description: ""
+      parameters:
+      - name: "audio"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: "OK <br> A file response"
+          content:
+            application/*:
+              schema:
+                type: "object"
+                format: "binary"
+  /profile:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+    patch:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /profile/avatar:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "string"
+                format: "byte"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /profile/course:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /profile/courses:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /profile/tags:
+    get:
+      description: "на swagger не документировать"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /changePassword:
+    post:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /checkToken:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /signIn:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /signOut:
+    post:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /signUp:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /workSpace/confirmLesson:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "string"
+                format: "byte"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /workSpace/delayLessons:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /workSpace/lesson:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+  /workSpace/plan:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ModelError"
+        "200":
+          description: ""
+          content:
+            '*/*':
+              schema: {}
+components:
+  schemas:
+    ModelError:
+      type: "object"
+      properties:
+        error:
+          type: "string"
+      required:
+      - "error"
